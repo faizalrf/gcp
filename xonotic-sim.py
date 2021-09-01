@@ -75,7 +75,6 @@ def createPlayers(players):
     print("Total number of players registered", playerCount)
     print()
 
-
 def startGame(players):
     conn = connectDB()
     cursor = conn.cursor()
@@ -85,16 +84,13 @@ def startGame(players):
     strValues = (strGenerator().title(), totalPlayers)
     cursor.execute(stmtGame, strValues)
     conn.commit()
-    print("Game Created ! ! !")
 
-    #stmtPrimaryCursor = "SELECT id FROM profile ORDER BY RAND() LIMIT " + str(totalPlayers)
-    #cursor.execute(stmtPrimaryCursor)
-    #dfPlayers = pd.DataFrame(cursor.fetchall())
-    #dfPlayers.columns = [[ 'id' ]]
-
+    stmtPrimaryCursor = "SELECT id FROM profile ORDER BY RAND() LIMIT " + str(totalPlayers)
+    cursor.execute(stmtPrimaryCursor)
+    dfPlayers = pd.DataFrame(cursor.fetchall())
+    dfPlayers.columns = [[ 'id' ]]
+    print(dfPlayers)
     #for profileRecord in range(len(dfPlayers)):
-
-
 
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
