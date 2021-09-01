@@ -81,7 +81,7 @@ def startGame(players):
     cursor = conn.cursor()
     totalPlayers = random.randrange(16, players)
 
-    stmtGame = "INSERT INTO game(game_name, total_players, end_time) VALUES(%s, %s)"
+    stmtGame = "INSERT INTO game(game_name, total_players) VALUES(%s, %s)"
     strValues = (strGenerator().title(), totalPlayers)
     cursor.execute(stmtGame, strValues)
     conn.commit()
