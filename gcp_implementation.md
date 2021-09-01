@@ -219,7 +219,7 @@ MySQL [xonoticdb]> desc game;
 | game_name     | varchar(120)        | NO   |     | NULL                 |                                |
 | total_players | int(11)             | NO   |     | NULL                 |                                |
 | start_time    | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) | on update CURRENT_TIMESTAMP(6) |
-| end_time      | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) |                                |
+| end_time      | timestamp(6)        | YES  |     | NULL                 |                                |
 +---------------+---------------------+------+-----+----------------------+--------------------------------+
 5 rows in set (0.002 sec)
 
