@@ -1,6 +1,8 @@
 gcloud beta container --project group1-6m11 clusters create xonotic-game \
 --region asia-southeast1 \
 --cluster-version 1.20.8-gke.900 \
+--tags=game-server \
+--scopes=gke-default \
 --machine-type e2-standard-2 \
 --image-type "COS_CONTAINERD" \
 --disk-type "pd-standard" --disk-size 100 \
