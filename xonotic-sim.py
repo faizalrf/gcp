@@ -13,9 +13,9 @@ import string
 import random
 
 # Returns a randomized string
-def strGenerator(chars=string.ascii_uppercase + string.digits):
+def strGenerator(chars=string.ascii_uppercase):
     size = random.randrange(4, 15)
-    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(size))
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase) for _ in range(size))
 
 #Creates a connection to the CloudSQL database instance
 def connectDB():
@@ -69,12 +69,22 @@ def createPlayers(players):
         #print(strValues)
         cursor.execute(strStatement, strValues)
         conn.commit()
-        print ("Registered player #", playerCount)
+        # To print on the same line
+        print("Players registation progress: ", str(round(playerCount/players*100))+"%", end="\r")
 
-    print ("Total number of players registered", playerCount)
+    print()
+    print("Total number of players registered", playerCount)
 
 def startGame(players):
     conn = connectDB()
 
-# Create 1000 random player records
-createPlayers(1000)        
+if __name__ == "__main__":
+    # If only one argument is proviced and it's a number greater than ZERO hen proceed
+    if len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
+        createPlayers(int(sys.argv[1]))
+    else:
+        print("\nERROR: Invalid command line argument count, player count must be greater than ZERO")
+        print("\n   Usage:")
+        print("   python3 xonotic-sim.py <Player Count>")
+        print("   shell> python3 xonotic-sim.py 256")
+        print("\nThe above will generate 256 user profiles\n")
