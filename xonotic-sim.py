@@ -72,8 +72,9 @@ def createPlayers(players):
         # To print on the same line
         print("Players registation progress: ", str(round(playerCount/players*100))+"%", end="\r")
 
-    print()
     print("Total number of players registered", playerCount)
+    print()
+
 
 def startGame(players):
     conn = connectDB()
