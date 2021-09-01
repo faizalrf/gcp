@@ -152,4 +152,103 @@ To remove the deployments
 - `kubectl delete -f ./deploy.yaml`
 - `kubectl delete -f ./deploy-lb.yaml`
 
+## CloudSQL
+
+Connect to the CloudSQL instance and execute the following commands to create a `game_user` within the database. 
+
+```
+MySQL [(none)]> create user game_user@'34.87.166.147' identified by 'password';
+Query OK, 0 rows affected (0.005 sec)
+
+MySQL [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| xonoticdb          |
++--------------------+
+5 rows in set (0.002 sec)
+
+MySQL [(none)]> grant all on xonoticdb.* to game_user@'34.87.166.147';
+Query OK, 0 rows affected (0.006 sec)
+
+MySQL [xonoticdb]> show tables;
++---------------------+
+| Tables_in_xonoticdb |
++---------------------+
+| game                |
+| leaderboard         |
+| lobby               |
+| profile             |
++---------------------+
+4 rows in set (0.002 sec)
+```
+
+Now the game_user can connect to the CLoudSQL instance from the static IP host, static IP is reqired and is configured under the networking part of the CloudSQL database.
+
+- `profile` table contains details about the player who have Xonotic game account
+- `lobby` table contains the list of lobbies possible in the game
+- `game` table is the current ongoing games and the past games that have ended
+- `leaderboard` contains the details of all the games such as
+  - When did the player started playing that particular session
+  - When did he die in game
+  - Which player killed him
+
+The leaderboard table can be used to query a particular game and identify who is the leader or identify the top 10 players in a game or, top 10 players across different game sessions.
+
+```
+MySQL [xonoticdb]> desc profile;
++----------------+---------------------+------+-----+----------------------+--------------------------------+
+| Field          | Type                | Null | Key | Default              | Extra                          |
++----------------+---------------------+------+-----+----------------------+--------------------------------+
+| id             | bigint(20) unsigned | NO   | PRI | NULL                 | auto_increment                 |
+| user_name      | varchar(120)        | YES  |     | NULL                 |                                |
+| user_email     | varchar(60)         | YES  |     | NULL                 |                                |
+| user_equipment | json                | YES  |     | NULL                 |                                |
+| user_level     | smallint(6)         | YES  |     | NULL                 |                                |
+| ts             | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) | on update CURRENT_TIMESTAMP(6) |
++----------------+---------------------+------+-----+----------------------+--------------------------------+
+6 rows in set (0.006 sec)
+
+MySQL [xonoticdb]> desc lobby;
++-------------+---------------------+------+-----+----------------------+--------------------------------+
+| Field       | Type                | Null | Key | Default              | Extra                          |
++-------------+---------------------+------+-----+----------------------+--------------------------------+
+| id          | bigint(20) unsigned | NO   | PRI | NULL                 | auto_increment                 |
+| name        | varchar(120)        | YES  |     | NULL                 |                                |
+| max_players | int(11)             | YES  |     | NULL                 |                                |
+| ts          | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) | on update CURRENT_TIMESTAMP(6) |
++-------------+---------------------+------+-----+----------------------+--------------------------------+
+4 rows in set (0.002 sec)
+
+MySQL [xonoticdb]> desc game;
++---------------+---------------------+------+-----+----------------------+--------------------------------+
+| Field         | Type                | Null | Key | Default              | Extra                          |
++---------------+---------------------+------+-----+----------------------+--------------------------------+
+| id            | bigint(20) unsigned | NO   | PRI | NULL                 | auto_increment                 |
+| total_players | int(11)             | NO   |     | NULL                 |                                |
+| start_time    | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) | on update CURRENT_TIMESTAMP(6) |
+| end_time      | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) |                                |
++---------------+---------------------+------+-----+----------------------+--------------------------------+
+4 rows in set (0.001 sec)
+
+MySQL [xonoticdb]> desc leaderboard;
++---------------+---------------------+------+-----+----------------------+--------------------------------+
+| Field         | Type                | Null | Key | Default              | Extra                          |
++---------------+---------------------+------+-----+----------------------+--------------------------------+
+| id            | bigint(20) unsigned | NO   | PRI | NULL                 | auto_increment                 |
+| game_id       | int(10) unsigned    | NO   |     | NULL                 |                                |
+| player_id     | bigint(20)          | NO   |     | NULL                 |                                |
+| killed_by     | bigint(20)          | NO   | MUL | NULL                 |                                |
+| joined_server | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) |                                |
+| ts            | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) | on update CURRENT_TIMESTAMP(6) |
++---------------+---------------------+------+-----+----------------------+--------------------------------+
+6 rows in set (0.001 sec)
+```
+
+set***Note:** To disalbe automatic VISUAL mode in VIM within GCP, enter `:set mouse-=a` within VIM.*
+
 ### Thank you 6m11
