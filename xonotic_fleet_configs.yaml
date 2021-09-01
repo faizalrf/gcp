@@ -1,0 +1,16 @@
+- name: fleet-spec-1
+  fleetSpec:
+    replicas: 2
+    template:
+      metadata:
+        labels:
+          xonotic-game-server-v1-label-key: xonotic-game-server-v1-label-1
+      spec:
+        ports:
+        - name: default
+          containerPort: 26000
+        template:
+          spec:
+            containers:
+            - name: xonotic
+              image: gcr.io/agones-images/xonotic-example:0.7
