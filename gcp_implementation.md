@@ -25,6 +25,8 @@ source <(kubectl completion bash)
 
 ### Create Game Cluster
 
+Provided in this repo as `xonotic-game.sh` execute it as `./xonotic-game.sh`
+
 ```
 $ gcloud beta container --project group1-6m11 clusters create xonotic-game \
 --region asia-southeast1 \
@@ -49,6 +51,8 @@ $ gcloud beta container --project group1-6m11 clusters create xonotic-game \
 ```
 
 ### Create UI Cluster
+
+Provided in this repo as `xonotic-ui.sh` execute it as `./xonotic-ui.sh`
 
 ```
 $ gcloud beta container --project group1-6m11 clusters create xonotic-ui \
@@ -83,7 +87,7 @@ $ export cluster_name=xonotic-ui
 $ gcloud container clusters get-credentials $cluster_name --region $region_name
 ```
 
-Create two files, `deploy.yaml` and `deploy_lb.yaml`
+Two files provided `deploy.yaml` and `deploy_lb.yaml`
 
 `deploy.yaml` should have the following content
 
