@@ -181,16 +181,14 @@ MySQL [xonoticdb]> show tables;
 +---------------------+
 | game                |
 | leaderboard         |
-| lobby               |
 | profile             |
 +---------------------+
-4 rows in set (0.002 sec)
+3 rows in set (0.001 sec)
 ```
 
 Now the game_user can connect to the CLoudSQL instance from the static IP host, static IP is reqired and is configured under the networking part of the CloudSQL database.
 
 - `profile` table contains details about the player who have Xonotic game account
-- `lobby` table contains the list of lobbies possible in the game
 - `game` table is the current ongoing games and the past games that have ended
 - `leaderboard` contains the details of all the games such as
   - When did the player started playing that particular session
@@ -213,27 +211,17 @@ MySQL [xonoticdb]> desc profile;
 +----------------+---------------------+------+-----+----------------------+--------------------------------+
 6 rows in set (0.006 sec)
 
-MySQL [xonoticdb]> desc lobby;
-+-------------+---------------------+------+-----+----------------------+--------------------------------+
-| Field       | Type                | Null | Key | Default              | Extra                          |
-+-------------+---------------------+------+-----+----------------------+--------------------------------+
-| id          | bigint(20) unsigned | NO   | PRI | NULL                 | auto_increment                 |
-| name        | varchar(120)        | YES  |     | NULL                 |                                |
-| max_players | int(11)             | YES  |     | NULL                 |                                |
-| ts          | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) | on update CURRENT_TIMESTAMP(6) |
-+-------------+---------------------+------+-----+----------------------+--------------------------------+
-4 rows in set (0.002 sec)
-
 MySQL [xonoticdb]> desc game;
 +---------------+---------------------+------+-----+----------------------+--------------------------------+
 | Field         | Type                | Null | Key | Default              | Extra                          |
 +---------------+---------------------+------+-----+----------------------+--------------------------------+
 | id            | bigint(20) unsigned | NO   | PRI | NULL                 | auto_increment                 |
+| game_name     | varchar(120)        | NO   |     | NULL                 |                                |
 | total_players | int(11)             | NO   |     | NULL                 |                                |
 | start_time    | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) | on update CURRENT_TIMESTAMP(6) |
 | end_time      | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) |                                |
 +---------------+---------------------+------+-----+----------------------+--------------------------------+
-4 rows in set (0.001 sec)
+5 rows in set (0.002 sec)
 
 MySQL [xonoticdb]> desc leaderboard;
 +---------------+---------------------+------+-----+----------------------+--------------------------------+

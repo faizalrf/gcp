@@ -78,11 +78,29 @@ def createPlayers(players):
 
 def startGame(players):
     conn = connectDB()
+    cursor = conn.cursor()
+    totalPlayers = random.randrange(16, players)
+
+    stmtGame = "INSERT INTO game(game_name, total_players) VALUES(%s, %s)"
+    strValues = (strGenerator().title(), totalPlayers)
+    cursor.execute(stmtGame, strValues)
+    conn.commit()
+    print("Game Created ! ! !")
+
+    #stmtPrimaryCursor = "SELECT id FROM profile ORDER BY RAND() LIMIT " + str(totalPlayers)
+    #cursor.execute(stmtPrimaryCursor)
+    #dfPlayers = pd.DataFrame(cursor.fetchall())
+    #dfPlayers.columns = [[ 'id' ]]
+
+    #for profileRecord in range(len(dfPlayers)):
+
+
 
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
     if len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
         createPlayers(int(sys.argv[1]))
+        startGame(int(sys.argv[1]))
     else:
         print("\nERROR: Invalid command line argument count, player count must be greater than ZERO")
         print("\n   Usage:")
