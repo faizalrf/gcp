@@ -95,7 +95,7 @@ def startGame(players):
     #Read the Game_ID from the Dataframe
     iGameID = 0
     if len(dfGameID) > 0:
-        iGameID = dfGameID['game_id'].iloc[0]
+        iGameID = dfGameID.loc[0]['game_id']
     
     conn.commit()
 
@@ -111,8 +111,8 @@ def startGame(players):
     # Insert them with the game_id with some defaults
     for profileRecord in range(len(dfPlayers)):
         print(iGameID)
-        print(dfPlayers['id'].iloc[profileRecord])
-        #strValues +=  "(" + str(iGameID) + ", " + str(dfPlayers['id'].iloc[profileRecord]) + ", current_timestamp(6)), "
+        print(dfPlayers.iloc[profileRecord]['id'])
+        strValues +=  "(" + str(iGameID) + ", " + str(dfPlayers['id'].iloc[profileRecord]) + ", current_timestamp(6)), "
         break
 
     # Close the final string values
