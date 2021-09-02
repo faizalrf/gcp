@@ -94,8 +94,8 @@ def startGame(players):
 
     #Read the Game_ID from the Dataframe
     iGameID = 0
-    if len(dfGameID) == 1:
-        iGameID = dfGameID['game_id'].iloc[1]
+    if len(dfGameID) > 0:
+        iGameID = dfGameID['game_id'].iloc[0]
     
     conn.commit()
 
