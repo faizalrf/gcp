@@ -130,10 +130,11 @@ def battleOn(conn, playerList, gameID):
 
     for totalEvents in range(1, maxKills):
         # Get a random player ID as the RIP dude from the from the Player Dataframe
-        randomPlayerIndex = playerList.iloc[random.randrange(0, len(playerList)-1)]['id']
+        randomPlayerID = playerList.iloc[random.randrange(0, len(playerList)-1)]['id']
         # Get a random player ID as the killer from the from the Player Dataframe
-        randomKillerIndex = playerList.iloc[random.randrange(0, len(playerList)-1)]['id']
+        randomKillerID = playerList.iloc[random.randrange(0, len(playerList)-1)]['id']
 
+        print(randomPlayerID, "is killed by ", randomKillerID)
         #stmtKill = "INSERT INTO leaderboard(game_id, player_id, killed_by, killed_time) VALUES(" + \
         #                str(gameID) + ", " + str(randomPlayerIndex) + ", " + str(randomKillerIndex) + ", current_timestamp(6))"
 
