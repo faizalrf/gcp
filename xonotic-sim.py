@@ -123,7 +123,7 @@ def startGame(players):
     #Start Game until 1000 total kills
     battleOn(conn, dfPlayers, iGameID)
 
-
+#Simulate random game play and kills
 def battleOn(conn, playerList, gameID):
     cursor = conn.cursor()
     maxKills = random.randrange(1, 2000)
@@ -138,11 +138,11 @@ def battleOn(conn, playerList, gameID):
                         str(gameID) + ", " + str(randomPlayerID) + ", " + str(randomKillerID) + ", current_timestamp(6))"
 
         cursor.execute(stmtKill)
-        time.sleep(random.randrange(0, 5))
+        time.sleep(random.randrange(0, 1))
         print("Game Progress: ", str(round(totalEvents/maxKills*100))+"%", end="\r")
+        conn.commit()
 
     print("Total global kills in current game", totalEvents)
-    conn.commit()
 
 def endGame(GameID):
     tmp=1
