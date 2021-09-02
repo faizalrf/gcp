@@ -23,24 +23,10 @@ def connectDB():
     conn = mysql.connector.connect(
         user="game_user",
         password="password",
-        host='10.29.182.2',
+        host='10.29.182.5',
         db="xonoticdb"
     )
     return conn
-
-# Reads data from leaderboard table
-def readData():
-    conn = connectDB()
-    # Execute a query
-    cursor = conn.cursor()
-    cursor.execute("SELECT * from leaderboard")
-
-    # Fetch the results
-    result = cursor.fetchall()
-
-    # Do something with the results
-    for row in result:
-        print(row)
 
 # Creates player profiles using randomized strings
 def createPlayers(players):
@@ -63,7 +49,7 @@ def createPlayers(players):
         iLevel = random.randrange(1, 100)
 
         # Generate SQL
-        strStatement = ("INSERT INTO xonoticdb.profile(user_name, user_email, user_inventory, user_level) "
+        strStatement = ("INSERT INTO xonoticdb.player(player_name, player_email, player_inventory, player_level) "
                         "VALUES(%s, %s, %s, %s)")
         strValues = (strName, strEmail, strInventory, iLevel)
 
