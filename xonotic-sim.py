@@ -104,18 +104,19 @@ def startGame(players):
     dfPlayers = pd.DataFrame(cursor.fetchall())
     dfPlayers.columns = [[ 'id' ]]
 
-    stmtCreateGameData = "INSERT INTO leaderboard(game_id, player_id, joined_server) "
-    strValues = "VALUES"
+    stmtCreateGameData = "INSERT INTO leaderboard(game_id, player_id, joined_server) VALUES"
+    strValues = ""
 
     # Itrate the players list selected from the profile table for this game
     # Insert them with the game_id with some defaults
     for profileRecord in range(len(dfPlayers)):
         strValues +=  "(" + str(iGameID) + ", " + str(dfPlayers['id'].iloc[profileRecord]) + ", current_timestamp(6)), "
+        break
 
     # Close the final string values
     strValues = strValues[:-2] + ")"
 
-    #print(strValues)
+    print(strValues)
 
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
