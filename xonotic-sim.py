@@ -144,14 +144,19 @@ def battleOn(conn, playerList, gameID):
 
     print("Total global kills in current game", totalEvents)
 
-def endGame(GameID):
-    tmp=1
+    # End Game and Update the end time for the particular game
+    endGame(conn, gameID)
 
+def endGame(conn, GameID):
+    cursor = conn.cursor()
+    stmtEnd = "UPDATE game SET end_time = current_timestamp(6)"
+    cursor.execute(stmtEnd)
+    conn.commit()
 
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
     if len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
-        #createPlayers(int(sys.argv[1]))
+        createPlayers(int(sys.argv[1]))
         startGame(int(sys.argv[1]))
     else:
         print("\nERROR: Invalid command line argument count, player count must be greater than ZERO")
