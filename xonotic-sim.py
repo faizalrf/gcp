@@ -126,7 +126,7 @@ def startGame(players):
 
 def battleOn(conn, playerList, gameID):
     cursor = conn.cursor()
-    maxKills = random.randrange(1, 1000)
+    maxKills = random.randrange(1, 2000)
 
     for totalEvents in range(1, maxKills):
         # Get a random player ID as the RIP dude from the from the Player Dataframe
@@ -134,12 +134,11 @@ def battleOn(conn, playerList, gameID):
         # Get a random player ID as the killer from the from the Player Dataframe
         randomKillerID = playerList.iloc[random.randrange(0, len(playerList)-1)]['id']
 
-        print(randomPlayerID, "is killed by ", randomKillerID)
-        #stmtKill = "INSERT INTO leaderboard(game_id, player_id, killed_by, killed_time) VALUES(" + \
-        #                str(gameID) + ", " + str(randomPlayerIndex) + ", " + str(randomKillerIndex) + ", current_timestamp(6))"
+        stmtKill = "INSERT INTO leaderboard(game_id, player_id, killed_by, killed_time) VALUES(" + \
+                        str(gameID) + ", " + str(randomPlayerID) + ", " + str(randomKillerID) + ", current_timestamp(6))"
 
-        #cursor.execute(stmtKill)
-        #time.sleep(random.randrange(0.1, 5))
+        cursor.execute(stmtKill)
+        time.sleep(random.randrange(0.1, 5))
         print("Game Progress: ", str(round(totalEvents/maxKills*100))+"%", end="\r")
 
     print("Total global kills in current game", totalEvents)
