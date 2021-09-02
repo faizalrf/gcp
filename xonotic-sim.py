@@ -104,7 +104,7 @@ def startGame(players):
     dfPlayers = pd.DataFrame(cursor.fetchall())
     dfPlayers.columns = [[ 'id' ]]
 
-    stmtCreateGameData = "INSERT INTO leaderboard(game_id, player_id, joined_server) VALUES"
+    stmtCreateLeaderBoard = "INSERT INTO leaderboard(game_id, player_id, joined_server) VALUES"
     strValues = ""
 
     # Itrate the players list selected from the profile table for this game
@@ -114,13 +114,15 @@ def startGame(players):
 
     # Close the final string values
     strValues = strValues[:-2]
+    stmtCreateLeaderBoard += strValues
 
-    print(strValues)
+    cursor.execute(stmtCreateLeaderBoard)
+    conn.commit()
 
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
     if len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
-        #createPlayers(int(sys.argv[1]))
+        createPlayers(int(sys.argv[1]))
         startGame(int(sys.argv[1]))
     else:
         print("\nERROR: Invalid command line argument count, player count must be greater than ZERO")
