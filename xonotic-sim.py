@@ -11,6 +11,7 @@ import mysql.connector
 import sys
 import string
 import random
+import time
 
 # Returns a randomized string
 def strGenerator(chars=string.ascii_uppercase):
@@ -68,10 +69,10 @@ def createPlayers(players):
 
         #print(strValues)
         cursor.execute(strStatement, strValues)
-        conn.commit()
         # To print on the same line
         print("Players registation progress: ", str(round(playerCount/players*100))+"%", end="\r")
 
+    conn.commit()
     print("Total number of players registered", playerCount)
     print()
 
@@ -119,10 +120,38 @@ def startGame(players):
     cursor.execute(stmtCreateLeaderBoard)
     conn.commit()
 
+    #Start Game until 1000 total kills
+    battleOn(conn, dfPlayers, iGameID)
+
+
+def battleOn(conn, playerList, gameID):
+    cursor = conn.cursor()
+    maxKills = random.randrange(1, 1000)
+
+    for totalEvents in range(1, maxKills):
+        # Get a random player ID as the RIP dude from the from the Player Dataframe
+        randomPlayerIndex = playerList.iloc[random.randrange(0, range(len(playerList)-1))]['id']
+        # Get a random player ID as the killer from the from the Player Dataframe
+        randomKillerIndex = playerList.iloc[random.randrange(0, range(len(playerList)-1))]['id']
+
+        stmtKill = "INSERT INTO leaderboard(game_id, player_id, killed_by, killed_time) VALUES(" + \
+                        str(gameID) + ", " + str(randomPlayerIndex) + ", " + str(randomKillerIndex) + ", current_timestamp(6))"
+
+        cursor.execute(stmtKill)
+        time.sleep(random.randrange(0.1, 5))
+        print("Game Progress: ", str(round(totalEvents/maxKills*100))+"%", end="\r")
+
+    print("Total global kills in current game", totalEvents)
+    conn.commit()
+
+def endGame(GameID):
+    tmp=1
+
+
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
     if len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
-        createPlayers(int(sys.argv[1]))
+        #createPlayers(int(sys.argv[1]))
         startGame(int(sys.argv[1]))
     else:
         print("\nERROR: Invalid command line argument count, player count must be greater than ZERO")
