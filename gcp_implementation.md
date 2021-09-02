@@ -224,17 +224,18 @@ MySQL [xonoticdb]> desc game;
 5 rows in set (0.002 sec)
 
 MySQL [xonoticdb]> desc leaderboard;
-+---------------+---------------------+------+-----+----------------------+--------------------------------+
-| Field         | Type                | Null | Key | Default              | Extra                          |
-+---------------+---------------------+------+-----+----------------------+--------------------------------+
-| id            | bigint(20) unsigned | NO   | PRI | NULL                 | auto_increment                 |
-| game_id       | int(10) unsigned    | NO   |     | NULL                 |                                |
-| player_id     | bigint(20)          | NO   |     | NULL                 |                                |
-| killed_by     | bigint(20)          | NO   | MUL | NULL                 |                                |
-| joined_server | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) |                                |
-| ts            | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) | on update CURRENT_TIMESTAMP(6) |
-+---------------+---------------------+------+-----+----------------------+--------------------------------+
-6 rows in set (0.001 sec)
++---------------+---------------------+------+-----+---------+----------------+
+| Field         | Type                | Null | Key | Default | Extra          |
++---------------+---------------------+------+-----+---------+----------------+
+| id            | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |
+| game_id       | int(10) unsigned    | NO   |     | NULL    |                |
+| player_id     | bigint(20)          | NO   |     | NULL    |                |
+| killed_by     | bigint(20)          | NO   | MUL | NULL    |                |
+| killed_time   | timestamp(6)        | YES  |     | NULL    |                |
+| joined_server | timestamp(6)        | YES  |     | NULL    |                |
+| left_server   | timestamp(6)        | YES  |     | NULL    |                |
++---------------+---------------------+------+-----+---------+----------------+
+7 rows in set (0.001 sec)
 ```
 
 set***Note:** To disalbe automatic VISUAL mode in VIM within GCP, enter `:set mouse-=a` within VIM.*
