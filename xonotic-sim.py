@@ -86,7 +86,7 @@ def startGame(players):
     
     conn.commit()
 
-    stmtPrimaryCursor = "SELECT id FROM profile ORDER BY RAND() LIMIT " + str(totalPlayers)
+    stmtPrimaryCursor = "SELECT id FROM player ORDER BY RAND() LIMIT " + str(totalPlayers)
     cursor.execute(stmtPrimaryCursor)
     dfPlayers = pd.DataFrame(cursor.fetchall())
     dfPlayers.columns = [[ 'id' ]]
