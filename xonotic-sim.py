@@ -115,7 +115,7 @@ def startGame(players):
     # Close the final string values
     strValues = strValues[:-2] + ")"
 
-    print(strValues)
+    #print(strValues)
 
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
