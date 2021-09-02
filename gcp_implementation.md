@@ -199,6 +199,8 @@ Now the game_user can connect to the CLoudSQL instance from the static IP host, 
 
 The leaderboard table can be used to query a particular game and identify who is the leader or identify the top 10 players in a game or, top 10 players across different game sessions.
 
+***Note:** CloudSQL (MySQL 8.0) is needed for this, (MySQL 5.7 does not support Window Function SQL syntax)*
+
 ```
 MySQL [xonoticdb]> desc profile;
 +----------------+---------------------+------+-----+----------------------+--------------------------------+
@@ -252,15 +254,3 @@ MySQL [xonoticdb]> desc leaderboard;
 set***Note:** To disalbe automatic VISUAL mode in VIM within GCP, enter `:set mouse-=a` within VIM.*
 
 ### Thank you 6m11
-
-
-DROP TABLE `leaderboard`;
-CREATE TABLE `leaderboard` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `game_id` int(10) unsigned NOT NULL,
-  `player_id` bigint(20) NOT NULL,
-  `killed_by` bigint(20) DEFAULT NULL,
-  `killed_time` timestamp(6) NULL DEFAULT NULL,
-  UNIQUE KEY `id` (`id`),
-  KEY `idx_1` (`killed_by`,`game_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1366 DEFAULT CHARSET=utf8
