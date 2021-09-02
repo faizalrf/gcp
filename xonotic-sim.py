@@ -111,10 +111,9 @@ def startGame(players):
     # Insert them with the game_id with some defaults
     for profileRecord in range(len(dfPlayers)):
         strValues +=  "(" + str(iGameID) + ", " + str(dfPlayers.iloc[profileRecord]['id']) + ", current_timestamp(6)), "
-        break
 
     # Close the final string values
-    strValues = strValues[:-2] + ")"
+    strValues = strValues[:-2]
 
     print(strValues)
 
