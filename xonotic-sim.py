@@ -110,7 +110,9 @@ def startGame(players):
     # Itrate the players list selected from the profile table for this game
     # Insert them with the game_id with some defaults
     for profileRecord in range(len(dfPlayers)):
-        strValues +=  "(" + str(iGameID) + ", " + str(dfPlayers['id'].iloc[profileRecord]) + ", current_timestamp(6)), "
+        print(iGameID)
+        print(dfPlayers['id'].iloc[profileRecord])
+        #strValues +=  "(" + str(iGameID) + ", " + str(dfPlayers['id'].iloc[profileRecord]) + ", current_timestamp(6)), "
         break
 
     # Close the final string values
