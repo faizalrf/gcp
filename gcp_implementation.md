@@ -180,16 +180,18 @@ MySQL [xonoticdb]> show tables;
 | Tables_in_xonoticdb |
 +---------------------+
 | game                |
+| gameplayer          |
 | leaderboard         |
 | profile             |
 +---------------------+
-3 rows in set (0.001 sec)
+4 rows in set (0.002 sec)
 ```
 
 Now the game_user can connect to the CLoudSQL instance from the static IP host, static IP is reqired and is configured under the networking part of the CloudSQL database.
 
 - `profile` table contains details about the player who have Xonotic game account
-- `game` table is the current ongoing games and the past games that have ended
+- `game` table is the current ongoing games master data and the past games that have ended
+- `gameplayer` table contains the player list that have joined the game, current and past
 - `leaderboard` contains the details of all the games such as
   - When did the player started playing that particular session
   - When did he die in game
@@ -223,21 +225,42 @@ MySQL [xonoticdb]> desc game;
 +---------------+---------------------+------+-----+----------------------+--------------------------------+
 5 rows in set (0.002 sec)
 
+MySQL [xonoticdb]> desc gameplayer;
++------------+---------------------+------+-----+---------+----------------+
+| Field      | Type                | Null | Key | Default | Extra          |
++------------+---------------------+------+-----+---------+----------------+
+| id         | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |
+| game_id    | int(10) unsigned    | NO   |     | NULL    |                |
+| player_id  | bigint(20)          | NO   | MUL | NULL    |                |
+| start_time | timestamp(6)        | YES  |     | NULL    |                |
++------------+---------------------+------+-----+---------+----------------+
+4 rows in set (0.002 sec)
+
 MySQL [xonoticdb]> desc leaderboard;
-+---------------+---------------------+------+-----+---------+----------------+
-| Field         | Type                | Null | Key | Default | Extra          |
-+---------------+---------------------+------+-----+---------+----------------+
-| id            | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |
-| game_id       | int(10) unsigned    | NO   |     | NULL    |                |
-| player_id     | bigint(20)          | NO   |     | NULL    |                |
-| killed_by     | bigint(20)          | YES  | MUL | NULL    |                |
-| killed_time   | timestamp(6)        | YES  |     | NULL    |                |
-| joined_server | timestamp(6)        | YES  |     | NULL    |                |
-| left_server   | timestamp(6)        | YES  |     | NULL    |                |
-+---------------+---------------------+------+-----+---------+----------------+
-7 rows in set (0.001 sec)
++-------------+---------------------+------+-----+---------+----------------+
+| Field       | Type                | Null | Key | Default | Extra          |
++-------------+---------------------+------+-----+---------+----------------+
+| id          | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |
+| game_id     | int(10) unsigned    | NO   |     | NULL    |                |
+| player_id   | bigint(20)          | NO   |     | NULL    |                |
+| killed_by   | bigint(20)          | YES  | MUL | NULL    |                |
+| killed_time | timestamp(6)        | YES  |     | NULL    |                |
++-------------+---------------------+------+-----+---------+----------------+
+5 rows in set (0.003 sec)
 ```
 
 set***Note:** To disalbe automatic VISUAL mode in VIM within GCP, enter `:set mouse-=a` within VIM.*
 
 ### Thank you 6m11
+
+
+DROP TABLE `leaderboard`;
+CREATE TABLE `leaderboard` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `game_id` int(10) unsigned NOT NULL,
+  `player_id` bigint(20) NOT NULL,
+  `killed_by` bigint(20) DEFAULT NULL,
+  `killed_time` timestamp(6) NULL DEFAULT NULL,
+  UNIQUE KEY `id` (`id`),
+  KEY `idx_1` (`killed_by`,`game_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1366 DEFAULT CHARSET=utf8

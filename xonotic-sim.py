@@ -105,7 +105,7 @@ def startGame(players):
     dfPlayers = pd.DataFrame(cursor.fetchall())
     dfPlayers.columns = [[ 'id' ]]
 
-    stmtCreateLeaderBoard = "INSERT INTO leaderboard(game_id, player_id, joined_server) VALUES"
+    stmtCreateLeaderBoard = "INSERT INTO gameplayer(game_id, player_id, start_time) VALUES"
     strValues = ""
 
     # Itrate the players list selected from the profile table for this game
@@ -138,7 +138,7 @@ def battleOn(conn, playerList, gameID):
                         str(gameID) + ", " + str(randomPlayerID) + ", " + str(randomKillerID) + ", current_timestamp(6))"
 
         cursor.execute(stmtKill)
-        time.sleep(random.randrange(0, 1))
+        time.sleep(random.randrange(0, 3))
         print("Game Progress: ", str(round(totalEvents/maxKills*100))+"%", end="\r")
         conn.commit()
 
