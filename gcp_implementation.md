@@ -230,7 +230,7 @@ MySQL [xonoticdb]> desc leaderboard;
 | id            | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |
 | game_id       | int(10) unsigned    | NO   |     | NULL    |                |
 | player_id     | bigint(20)          | NO   |     | NULL    |                |
-| killed_by     | bigint(20)          | NO   | MUL | NULL    |                |
+| killed_by     | bigint(20)          | YES  | MUL | NULL    |                |
 | killed_time   | timestamp(6)        | YES  |     | NULL    |                |
 | joined_server | timestamp(6)        | YES  |     | NULL    |                |
 | left_server   | timestamp(6)        | YES  |     | NULL    |                |

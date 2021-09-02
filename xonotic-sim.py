@@ -83,19 +83,44 @@ def startGame(players):
     stmtGame = "INSERT INTO game(game_name, total_players) VALUES(%s, %s)"
     strValues = (strGenerator().title(), totalPlayers)
     cursor.execute(stmtGame, strValues)
+
+    #Fetch the last Game_ID inserted
+    stmtGameID = "SELECT LAST_INSERT_ID() as GameID"
+    cursor.execute(stmtGameID)
+    dfGameID = pd.DataFrame(cursor.fetchall())
+
+    #Assign the column header as "Game_ID" to the Dataframe
+    dfGameID.columns = [[ 'game_id' ]]
+
+    #Read the Game_ID from the Dataframe
+    iGameID = 0
+    if len(dfGameID) == 1:
+        iGameID = dfGameID['game_id'].iloc(0)
+    
     conn.commit()
 
     stmtPrimaryCursor = "SELECT id FROM profile ORDER BY RAND() LIMIT " + str(totalPlayers)
     cursor.execute(stmtPrimaryCursor)
     dfPlayers = pd.DataFrame(cursor.fetchall())
     dfPlayers.columns = [[ 'id' ]]
-    print(dfPlayers)
-    #for profileRecord in range(len(dfPlayers)):
+
+    stmtCreateGameData = "INSERT INTO leaderboard(game_id, player_id, joined_server) "
+    strValues = "VALUES"
+
+    # Itrate the players list selected from the profile table for this game
+    # Insert them with the game_id with some defaults
+    for profileRecord in range(len(dfPlayers)):
+        strValues +=  "(" + str(iGameID) + ", " + str(dfPlayers["profileRecord"]) + ", current_timestamp(6)" + "), "
+
+    # Close the final string values
+    strValues = strValues[:-2] + ")"
+
+    print(strValues)
 
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
     if len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
-        createPlayers(int(sys.argv[1]))
+        #createPlayers(int(sys.argv[1]))
         startGame(int(sys.argv[1]))
     else:
         print("\nERROR: Invalid command line argument count, player count must be greater than ZERO")
