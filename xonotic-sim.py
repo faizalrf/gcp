@@ -138,7 +138,7 @@ def battleOn(conn, playerList, gameID):
                         str(gameID) + ", " + str(randomPlayerID) + ", " + str(randomKillerID) + ", current_timestamp(6))"
 
         cursor.execute(stmtKill)
-        time.sleep(random.randrange(0, 2))
+        time.sleep(random.randrange(0, 1))
         print("Game Progress: ", str(round(totalEvents/maxKills*100))+"%", end="\r")
         conn.commit()
 
