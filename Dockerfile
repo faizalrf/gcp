@@ -11,10 +11,9 @@ RUN apt-get -y install \
 
 WORKDIR /app
 
-COPY requirements.txt /app/requirements.txt
+ADD . /app
+
 RUN pip install -r requirements.txt --src /usr/local/src
 
-COPY . .
-
 EXPOSE 8080
-CMD [ "python", "xonotic-data-viewer.py" ]
+CMD [ "python", "/app/app.py" ]
