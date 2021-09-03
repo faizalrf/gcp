@@ -5,10 +5,10 @@ USE xonoticdb;
 
 CREATE TABLE `player` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `player_name` varchar(120) DEFAULT NULL,
-  `player_email` varchar(60) DEFAULT NULL,
-  `player_inventory` json DEFAULT NULL,
-  `player_level` smallint(6) DEFAULT NULL,
+  `name` varchar(120) DEFAULT NULL,
+  `email` varchar(60) DEFAULT NULL,
+  `inventory` json DEFAULT NULL,
+  `level` smallint(6) DEFAULT NULL,
   `registration_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=387 DEFAULT CHARSET=utf8;
