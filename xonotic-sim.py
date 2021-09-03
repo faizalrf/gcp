@@ -178,7 +178,7 @@ if __name__ == "__main__":
     elif len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
         createPlayers(int(sys.argv[1]))
         startGame(int(sys.argv[1]))
-    elif len(sys.argv) == 2 and sys.argv[2] == "test":
+    elif len(sys.argv) == 2 and sys.argv[1] == "test":
         testConnection()
     else:
         print("\nERROR: Invalid command line argument count, player count must be greater than ZERO")
