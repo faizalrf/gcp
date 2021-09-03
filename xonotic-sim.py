@@ -12,7 +12,7 @@ import sys
 import string
 import random
 import time
-
+  
 # Returns a randomized string
 def strGenerator(chars=string.ascii_uppercase):
     size = random.randrange(4, 15)
@@ -50,7 +50,11 @@ def connectDB():
         host=ConnElements[2],
         db=ConnElements[3]
     )
+    print("Connection to the Database successful!!!")
     return conn
+
+def testConnection():
+    conn = connectDB()
 
 # Creates player profiles using randomized strings
 def createPlayers(players):
@@ -174,6 +178,8 @@ if __name__ == "__main__":
     elif len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
         createPlayers(int(sys.argv[1]))
         startGame(int(sys.argv[1]))
+    elif len(sys.argv) == 2 and sys.argv[2] == "test":
+        testConnection()
     else:
         print("\nERROR: Invalid command line argument count, player count must be greater than ZERO")
         print("\n   Usage:")
