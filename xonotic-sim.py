@@ -18,13 +18,37 @@ def strGenerator(chars=string.ascii_uppercase):
     size = random.randrange(4, 15)
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase) for _ in range(size))
 
+def access_secret_version(project_id, secret_id, version_id):
+    # Import the Secret Manager client library.
+    from google.cloud import secretmanager
+
+    # Create the Secret Manager client.
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Build the resource name of the secret version.
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+
+    # Access the secret version.
+    response = client.access_secret_version(request={"name": name})
+
+    # Print the secret payload.
+    #
+    # WARNING: Do not print the secret in a production environment - this
+    # snippet is showing how to access the secret material.
+    payload = response.payload.data.decode("UTF-8")
+    print("Plaintext: {}".format(payload))
+
 #Creates a connection to the CloudSQL database instance
 def connectDB():
+    strConn = access_secret_version("group1-6m11", "db-connection-string", "2")
+    ConnElements = strConn.split(",")
+    print(ConnElements)
+
     conn = mysql.connector.connect(
-        user="game_user",
-        password="password",
-        host='10.29.182.5',
-        db="xonoticdb"
+        user=ConnElements[0],
+        password=ConnElements[1],
+        host=ConnElements[2],
+        db=ConnElements[3]
     )
     return conn
 
