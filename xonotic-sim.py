@@ -112,7 +112,7 @@ def startGame(players):
 #Simulate random game play and kills
 def battleOn(conn, playerList, gameID):
     cursor = conn.cursor()
-    maxKills = random.randrange(500, 5000)
+    maxKills = random.randrange(500, 3000)
 
     for totalEvents in range(1, maxKills):
         # Get a random player ID as the RIP dude from the from the Player Dataframe
