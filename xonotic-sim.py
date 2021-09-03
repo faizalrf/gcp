@@ -49,7 +49,7 @@ def createPlayers(players):
         iLevel = random.randrange(1, 100)
 
         # Generate SQL
-        strStatement = ("INSERT INTO player(player_name, player_email, player_inventory, player_level) "
+        strStatement = ("INSERT INTO player(name, email, inventory, level) "
                         "VALUES(%s, %s, %s, %s)")
         strValues = (strName, strEmail, strInventory, iLevel)
 
