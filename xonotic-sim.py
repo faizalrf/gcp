@@ -33,7 +33,7 @@ def createPlayers(players):
     conn = connectDB()
     cursor = conn.cursor()
 
-    for playerCount in range(players+1):
+    for playerCount in range(players):
         # Generate Random Values
         strName = strGenerator().title() + " " + strGenerator().title()
         strEmail = strGenerator().lower() + "@" + strGenerator().lower() + ".com"
@@ -60,7 +60,7 @@ def createPlayers(players):
     
     #Commit once all the creation is done
     conn.commit()
-    print("Total number of players registered", playerCount, end="\n")
+    print("Total number of players registered", playerCount+1, end="\n")
 
 def startGame(players):
     conn = connectDB()
