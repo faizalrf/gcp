@@ -189,7 +189,7 @@ MySQL [xonoticdb]> show tables;
 
 Now the game_user can connect to the CLoudSQL instance from the static IP host, static IP is reqired and is configured under the networking part of the CloudSQL database.
 
-- `profile` table contains details about the player who have Xonotic game account
+- `player` table contains user profiles who have Xonotic game account
 - `game` table is the current ongoing games master data and the past games that have ended
 - `gameplayer` table contains the player list that have joined the game, current and past
 - `leaderboard` contains the details of all the games such as
@@ -202,18 +202,18 @@ The leaderboard table can be used to query a particular game and identify who is
 ***Note:** CloudSQL (MySQL 8.0) is needed for this, (MySQL 5.7 does not support Window Function SQL syntax)*
 
 ```
-MySQL [xonoticdb]> desc profile;
-+----------------+---------------------+------+-----+----------------------+--------------------------------+
-| Field          | Type                | Null | Key | Default              | Extra                          |
-+----------------+---------------------+------+-----+----------------------+--------------------------------+
-| id             | bigint(20) unsigned | NO   | PRI | NULL                 | auto_increment                 |
-| user_name      | varchar(120)        | YES  |     | NULL                 |                                |
-| user_email     | varchar(60)         | YES  |     | NULL                 |                                |
-| user_equipment | json                | YES  |     | NULL                 |                                |
-| user_level     | smallint(6)         | YES  |     | NULL                 |                                |
-| ts             | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) | on update CURRENT_TIMESTAMP(6) |
-+----------------+---------------------+------+-----+----------------------+--------------------------------+
-6 rows in set (0.006 sec)
+MySQL [xonoticdb]> desc player;
++-------------------+---------------------+------+-----+----------------------+--------------------------------------------------+
+| Field             | Type                | Null | Key | Default              | Extra                                            |
++-------------------+---------------------+------+-----+----------------------+--------------------------------------------------+
+| id                | bigint(20) unsigned | NO   | PRI | NULL                 | auto_increment                                   |
+| name              | varchar(120)        | YES  |     | NULL                 |                                                  |
+| email             | varchar(60)         | YES  |     | NULL                 |                                                  |
+| inventory         | json                | YES  |     | NULL                 |                                                  |
+| level             | smallint(6)         | YES  |     | NULL                 |                                                  |
+| registration_date | timestamp(6)        | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
++-------------------+---------------------+------+-----+----------------------+--------------------------------------------------+
+6 rows in set (0.003 sec)
 
 MySQL [xonoticdb]> desc game;
 +---------------+---------------------+------+-----+----------------------+--------------------------------+

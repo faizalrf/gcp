@@ -5,8 +5,6 @@
 #####################################################
 
 from datetime import datetime
-import numpy as np
-import pandas as pd
 import mysql.connector
 import sys
 import string
@@ -18,6 +16,7 @@ def strGenerator(chars=string.ascii_uppercase):
     size = random.randrange(4, 15)
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase) for _ in range(size))
 
+# Secret Manager integration which does not work at the moment!
 def access_secret_version(project_id, secret_id, version_id):
     # Import the Secret Manager client library.
     from google.cloud import secretmanager
@@ -99,8 +98,16 @@ def createPlayers(players):
     print()
 
 def startGame(players):
+    import pandas as pd
+
     conn = connectDB()
     cursor = conn.cursor()
+
+    if not validatePlayers(conn):
+        print("ERROR! Please execute the `register` first")
+        print("\tshell> python3 xonotic-sim.py 1000 register\n")
+        return
+        
     totalPlayers = random.randrange(16, players)
 
     stmtGame = "INSERT INTO game(game_name, total_players) VALUES(%s, %s)"
@@ -160,7 +167,7 @@ def battleOn(conn, playerList, gameID):
                         str(gameID) + ", " + str(randomPlayerID) + ", " + str(randomKillerID) + ", current_timestamp(6))"
 
         cursor.execute(stmtKill)
-        time.sleep(random.randrange(0, 1))
+        time.sleep(random.randrange(0, 2))
         print("Game Progress: ", str(round(totalEvents/maxKills*100))+"%", end="\r")
         conn.commit()
 
@@ -175,6 +182,25 @@ def endGame(conn, GameID):
     cursor.execute(stmtEnd)
     conn.commit()
 
+# Check if player's data has been generated or not
+def validatePlayers(conn):
+    import pandas as pd
+
+    cursor = conn.cursor()
+    stmtPlayerCheck = "SELECT count(*) AS Players FROM player"
+    cursor.execute(stmtPlayerCheck)
+    dfPlayer = pd.DataFrame(cursor.fetchall())
+
+    #Assign the column header as "Game_ID" to the Dataframe
+    dfPlayer.columns = [[ 'player_count' ]]
+
+    #Read the Game_ID from the Dataframe
+    playerCount = 0
+    if len(dfPlayer) > 0:
+        playerCount = dfPlayer.loc[0]['player_count']
+    
+    return (playerCount > 0)
+    
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
     if len(sys.argv) == 3 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
