@@ -141,13 +141,12 @@ def endGame(conn, GameID):
 
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 3 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
         if sys.argv[1] == "register":
             createPlayers(int(sys.argv[1]))
-        if sys.argv[1] == "start":
+        if sys.argv[1] == "start" and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
             startGame(int(sys.argv[1]))
-
-    if len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
+    elif len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
         startGame(int(sys.argv[1]))
     else:
         print("\nERROR: Invalid command line argument count, player count must be greater than ZERO")
