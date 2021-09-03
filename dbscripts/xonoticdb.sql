@@ -1,5 +1,7 @@
+DROP DATABASE IF EXISTS xonoticdb;
 CREATE DATABASE xonoticdb;
 USE xonoticdb;
+
 
 CREATE TABLE `player` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -15,7 +17,7 @@ CREATE TABLE `game` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `game_name` varchar(120) NOT NULL,
   `total_players` int(11) NOT NULL,
-  `start_time` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `start_time` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   `end_time` timestamp(6) NULL DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;

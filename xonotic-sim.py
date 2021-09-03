@@ -33,14 +33,14 @@ def createPlayers(players):
     conn = connectDB()
     cursor = conn.cursor()
 
-    for playerCount in range(players+1):
+    for playerCount in range(players):
         # Generate Random Values
         strName = strGenerator().title() + " " + strGenerator().title()
         strEmail = strGenerator().lower() + "@" + strGenerator().lower() + ".com"
 
         strInventory = '{'
-        # Randon Inventory size from 1 to 10
-        for i in range(1, random.randrange(2,10)):
+        # Randon Inventory size up to 7 items
+        for i in range(1, random.randrange(2,7)):
             strInventory += '"item-' + str(i) + '":"' + strGenerator().lower() + '", '
 
         # Remove the last ", " from the string and close the JSON string with "}"
@@ -135,18 +135,28 @@ def battleOn(conn, playerList, gameID):
 
 def endGame(conn, GameID):
     cursor = conn.cursor()
-    stmtEnd = "UPDATE game SET end_time = current_timestamp(6)"
+    stmtEnd = "UPDATE game SET end_time = current_timestamp(6) where game_id=" + str(GameID)
     cursor.execute(stmtEnd)
     conn.commit()
 
 if __name__ == "__main__":
     # If only one argument is proviced and it's a number greater than ZERO hen proceed
+    if len(sys.argv) == 3:
+        if sys.argv[1] == "register":
+            createPlayers(int(sys.argv[1]))
+        if sys.argv[1] == "start":
+            startGame(int(sys.argv[1]))
+
     if len(sys.argv) == 2 and (sys.argv[1]).isdigit() and sys.argv[1] > "0":
-        createPlayers(int(sys.argv[1]))
         startGame(int(sys.argv[1]))
     else:
         print("\nERROR: Invalid command line argument count, player count must be greater than ZERO")
         print("\n   Usage:")
-        print("   python3 xonotic-sim.py <Player Count>")
-        print("   shell> python3 xonotic-sim.py 256")
+        print("   python3 xonotic-sim.py <Player Count> [<event>]")
+        print("   event: register --> To register new users")        
+        print("   event: start    --> To start game simulation based on the user count specified")
+        print("   ** if the [event] is not provided. it will execute both events, register -> start")
+        print("   shell> python3 xonotic-sim.py 256 register")
         print("\nThe above will generate 256 user profiles\n")
+        print("   shell> python3 xonotic-sim.py 256 start")
+        print("\nThe above will simulate 256 user battle royale\n")
