@@ -135,7 +135,7 @@ def battleOn(conn, playerList, gameID):
 
 def endGame(conn, GameID):
     cursor = conn.cursor()
-    stmtEnd = "UPDATE game SET end_time = current_timestamp(6) where game_id=" + str(GameID)
+    stmtEnd = "UPDATE game SET end_time = current_timestamp(6) where id=" + str(GameID)
     cursor.execute(stmtEnd)
     conn.commit()
 
