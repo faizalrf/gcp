@@ -33,7 +33,7 @@ def createPlayers(players):
     conn = connectDB()
     cursor = conn.cursor()
 
-    for playerCount in range(players):
+    for playerCount in range(players+1):
         # Generate Random Values
         strName = strGenerator().title() + " " + strGenerator().title()
         strEmail = strGenerator().lower() + "@" + strGenerator().lower() + ".com"
