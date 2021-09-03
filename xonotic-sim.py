@@ -57,8 +57,9 @@ def createPlayers(players):
         cursor.execute(strStatement, strValues)
         # To print on the same line
         print("Players registation progress: ", str(round(playerCount/players*100))+"%", end="\r")
-        conn.commit()
-
+    
+    #Commit once all the creation is done
+    conn.commit()
     print("Total number of players registered", playerCount, end="\n")
 
 def startGame(players):
@@ -111,7 +112,7 @@ def startGame(players):
 #Simulate random game play and kills
 def battleOn(conn, playerList, gameID):
     cursor = conn.cursor()
-    maxKills = random.randrange(1000, 5000)
+    maxKills = random.randrange(500, 5000)
 
     for totalEvents in range(1, maxKills):
         # Get a random player ID as the RIP dude from the from the Player Dataframe
