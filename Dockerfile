@@ -13,7 +13,7 @@ WORKDIR /app
 
 ADD . /app
 
-RUN pip install -r requirements.txt --src /usr/local/src
+RUN pip install -r /app/requirements.txt --src /usr/local/src
 
 EXPOSE 8080
 CMD [ "python", "/app/app.py" ]
