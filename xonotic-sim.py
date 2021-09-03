@@ -60,7 +60,8 @@ def createPlayers(players):
     
     #Commit once all the creation is done
     conn.commit()
-    print("Total number of players registered", playerCount+1, end="\n")
+    print("Total number of players registered", playerCount+1)
+    print()
 
 def startGame(players):
     conn = connectDB()
