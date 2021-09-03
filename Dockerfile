@@ -4,6 +4,7 @@ RUN apt-get clean \
     && apt-get -y update
 
 RUN apt-get -y install \
+    apt-utils \
     nginx \
     python3-dev \
     build-essential
