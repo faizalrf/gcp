@@ -40,16 +40,23 @@ def access_secret_version(project_id, secret_id, version_id):
 
 #Creates a connection to the CloudSQL database instance
 def connectDB():
-    strConn = access_secret_version("group1-6m11", "db-connection-string", "2")
-    ConnElements = strConn.split(",")
-    print(ConnElements)
+    #strConn = access_secret_version("group1-6m11", "db-connection-string", "2")
+    #ConnElements = strConn.split(",")
+    #print(ConnElements)
 
+    #conn = mysql.connector.connect(
+    #    user=ConnElements[0],
+    #    password=ConnElements[1],
+    #    host=ConnElements[2],
+    #    db=ConnElements[3]
+    #)
     conn = mysql.connector.connect(
-        user=ConnElements[0],
-        password=ConnElements[1],
-        host=ConnElements[2],
-        db=ConnElements[3]
+        user="game_user",
+        password="password",
+        host='10.29.182.5',
+        db="xonoticdb"
     )
+
     print("Connection to the Database successful!!!")
     return conn
 
