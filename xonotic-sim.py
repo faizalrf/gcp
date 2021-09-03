@@ -57,7 +57,7 @@ def connectDB():
         db="xonoticdb"
     )
 
-    print("Connection to the Database successful!!!")
+    print("Connection to the Database successful!!!\n")
     return conn
 
 def testConnection():
