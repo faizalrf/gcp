@@ -41,7 +41,7 @@ def rootPage():
     target = os.environ.get('TARGET', 'World')
     return 'Welcome to the Mountkirk Game UI {}!\n'.format(target)
 
-@app.route('/games', methods=("POST", "GET"), endpoint='listGames')
+@app.route('/games', endpoint='listGames')
 def listGames(conn):
     import pandas as pd
     cursor = conn.cursor()
@@ -54,7 +54,7 @@ def listGames(conn):
 
     return render_template('games_list.html',  tables=[dfGames.to_html(classes='data')], titles=dfGames.columns.values)
 
-@app.route('/players', methods=("POST", "GET"), endpoint='listPlayers')
+@app.route('/players', endpoint='listPlayers')
 def listPlayers(conn):
     import pandas as pd
     cursor = conn.cursor()
@@ -67,7 +67,7 @@ def listPlayers(conn):
 
     return render_template('games_players.html',  tables=[dfPlayers.to_html(classes='data')], titles=dfPlayers.columns.values)
 
-@app.route("/topThree",  methods=("POST", "GET"), endpoint='listTopThree')
+@app.route("/topThree", endpoint='listTopThree')
 def listTopThree(conn):
     import pandas as pd
     cursor = conn.cursor()
