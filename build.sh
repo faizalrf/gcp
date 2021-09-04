@@ -1,6 +1,5 @@
 Version=$1
-if [ $? -ne 1 ]
-then
+if [ "$#" -ne 1 ]; then
     echo "Must specify the version number for the build and deployment"
     echo "build.sh 1"
     echo
