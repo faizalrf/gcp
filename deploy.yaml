@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: hello-world
-        image: "gcr.io/group1-6m11/x-leaderboard:v4"
+        image: "gcr.io/group1-6m11/x-leaderboard:v5"
         ports:
         - containerPort: 8080
         env:
