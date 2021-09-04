@@ -8,3 +8,5 @@ fi
 docker build -t x-leaderboard:v${Version} .
 docker tag x-leaderboard:v${Version} gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v${Version}
 docker push gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v${Version}
+kubectl delete -f ./deploy.yaml
+kubectl delete -f ./deploy-lb.yaml
