@@ -13,8 +13,8 @@ spec:
         app: xonotic-ui
     spec:
       containers:
-      - name: hello-world
-        image: "gcr.io/group1-6m11/x-leaderboard:v5"
+      - name: x-leaderboard
+        image: "gcr.io/group1-6m11/x-leaderboard:v1"
         ports:
         - containerPort: 8080
         env:
