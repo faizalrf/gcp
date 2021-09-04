@@ -40,8 +40,9 @@ def connectDB():
 @app.route("/", endpoint='rootPage')
 def rootPage():
     hostName = platform.uname()[1]
-    target = os.environ.get('TARGET', 'World from `host` -> {' + hostName + "}")
-    return 'Welcome to the Mountkirk Game UI {}!\n'.format(target)
+    #target = os.environ.get('TARGET', 'from `host` -> {' + hostName + "}")
+    strHost = "Welcome to the Mountkirk Game UI\nFrom `host` -> {" + hostName + "}"
+    return strHost
 
     #return """
     #  <h1>Welcome to the Mountkirk Game from {}!</h1>
