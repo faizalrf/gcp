@@ -13,10 +13,10 @@ spec:
         app: xonotic-ui
     spec:
       containers:
-      - name: hello
-        image: "gcr.io/google-samples/hello-app:2.0"
+      - name: hello-world
+        image: "gcr.io/group1-6m11/x-leaderboard:v1"
         ports:
         - containerPort: 8080
         env:
           - name: PORT
-            value: "8080"        
+            value: "8080"
