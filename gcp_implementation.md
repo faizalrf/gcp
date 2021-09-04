@@ -77,6 +77,16 @@ $ gcloud beta container --project group1-6m11 clusters create xonotic-ui \
 --node-locations "asia-southeast1-a","asia-southeast1-b","asia-southeast1-c"
 ```
 
+### Build the UI
+
+```
+$ docker build -t x-leaderboard:v1 .
+$ docker tag x-leaderboard:v1 gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v1
+$ docker push gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v1
+```
+
+***Note:** This should already be built, no need to repeat this step*
+
 ### Deploy UI App
 
 Once the clusters are ready, we can now deploy the test app
@@ -107,13 +117,16 @@ spec:
         app: xonotic-ui
     spec:
       containers:
-      - name: hello
-        image: "gcr.io/google-samples/hello-app:2.0"
+      - name: hello-world
+        image: "gcr.io/group1-6m11/x-leaderboard:v1"
         ports:
         - containerPort: 8080
+        env:
+          - name: PORT
+            value: "8080"
 ```
 
-This will deploy the hello-world app to the cluster.
+This will deploy the `x-leaderboard` app to the xonotic-ui.
 
 `deploy_lb.yaml` should contain the following. 
 

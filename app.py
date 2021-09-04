@@ -36,12 +36,12 @@ def connectDB():
     return conn
 
 # Check if player's data has been generated or not
-@app.route("/")
+@app.route("/", endpoint='rootPage')
 def rootPage():
     target = os.environ.get('TARGET', 'World')
     return 'Welcome to the Mountkirk Game UI {}!\n'.format(target)
 
-@app.route('/games', methods=("POST", "GET"))
+@app.route('/games', methods=("POST", "GET"), endpoint='listGames')
 def listGames(conn):
     import pandas as pd
     cursor = conn.cursor()
@@ -54,8 +54,8 @@ def listGames(conn):
 
     return render_template('games_list.html',  tables=[dfGames.to_html(classes='data')], titles=dfGames.columns.values)
 
-@app.route('/players', methods=("POST", "GET"))
-def listGames(conn):
+@app.route('/players', methods=("POST", "GET"), endpoint='listPlayers')
+def listPlayers(conn):
     import pandas as pd
     cursor = conn.cursor()
     stmtPlayers = "SELECT * FROM players ORDER BY id DESC"
@@ -67,7 +67,7 @@ def listGames(conn):
 
     return render_template('games_players.html',  tables=[dfPlayers.to_html(classes='data')], titles=dfPlayers.columns.values)
 
-@app.route("/topThree")
+@app.route("/topThree",  methods=("POST", "GET"), endpoint='listTopThree')
 def listTopThree(conn):
     import pandas as pd
     cursor = conn.cursor()
