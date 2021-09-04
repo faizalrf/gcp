@@ -5,8 +5,10 @@ if [ "$#" -ne 1 ]; then
     echo
     exit 1
 fi
+kubectl delete -f ./deploy.yaml
+kubectl delete -f ./deploy-lb.yaml
 docker build -t x-leaderboard:v${Version} .
 docker tag x-leaderboard:v${Version} gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v${Version}
 docker push gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v${Version}
-kubectl delete -f ./deploy.yaml
-kubectl delete -f ./deploy-lb.yaml
+kubectl apply -f ./deploy.yaml
+kubectl apply -f ./deploy-lb.yaml
