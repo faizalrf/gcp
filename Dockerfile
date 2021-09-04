@@ -1,4 +1,6 @@
-FROM python:3.9-slim
+# Use the official lightweight Python image.
+# https://hub.docker.com/_/python
+FROM python:3.7-slim
 
 RUN apt-get clean \
     && apt-get -y update
@@ -9,11 +11,17 @@ RUN apt-get -y install \
     python3-dev \
     build-essential
 
-WORKDIR /app
+# Copy local code to the container image.
+ENV APP_HOME /app
+WORKDIR $APP_HOME
+COPY . ./
 
-ADD . /app
-
+# Install production dependencies.
+# RUN pip install Flask gunicorn
 RUN pip install -r requirements.txt --src /usr/local/src
 
-EXPOSE 8080
-CMD [ "python", "/app/app.py" ]
+# Run the web service on container startup. Here we use the gunicorn
+# webserver, with one worker process and 8 threads.
+# For environments with multiple CPU cores, increase the number of workers
+# to be equal to the cores available.
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 2 app:app

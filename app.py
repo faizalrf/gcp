@@ -6,6 +6,7 @@
 from flask import Flask, request, render_template, session, redirect
 from datetime import datetime
 import mysql.connector
+import os
 import sys
 import string
 import random
@@ -37,7 +38,8 @@ def connectDB():
 # Check if player's data has been generated or not
 @app.route("/")
 def rootPage():
-    return "Welcome to the Mountkirk Game UI"
+    target = os.environ.get('TARGET', 'World')
+    return 'Welcome to the Mountkirk Game UI {}!\n'.format(target)
 
 @app.route('/games', methods=("POST", "GET"))
 def listGames(conn):
@@ -77,4 +79,4 @@ def listTopThree(conn):
     return render_template('games_leaderboard.html',  tables=[dfTopPlayer.to_html(classes='data')], titles=dfTopPlayer.columns.values)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))

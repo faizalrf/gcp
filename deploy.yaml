@@ -17,3 +17,6 @@ spec:
         image: "gcr.io/google-samples/hello-app:2.0"
         ports:
         - containerPort: 8080
+        env:
+          - name: PORT
+            value: "8080"        
