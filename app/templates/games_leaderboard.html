@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mountkirk Games Top 3 Players</title>
+    <title>Mountkirk Games, List of Top 3 Players</title>
 </head>
 <body>
-
-{% for table in tables %}
+    <h1>Greetings from your `host` -> {{ hostName }}!</h1>
+    {% for table in tables %}
             {{titles[loop.index]}}
             {{ table|safe }}
-{% endfor %}
+    {% endfor %}
 </body>
 </html>
