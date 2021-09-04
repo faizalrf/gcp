@@ -61,10 +61,10 @@ def listGames():
     stmtGames = "SELECT * FROM game ORDER BY id DESC" 
     cursor.execute(stmtGames)
     dfGames = pd.DataFrame(cursor.fetchall())
-    flash('Game list generated on `host` -> {' + hostName + "}")
     #Assign the column header to the Dataframe
     dfGames.columns = [[ 'Game ID', 'Game Name', 'Total Players', 'Start Time', 'End Time' ]]
 
+    flash('Game list generated on `host` -> {' + hostName + "}")
     return render_template('games_list.html',  tables=[dfGames.to_html(classes='data')], titles=dfGames.columns.values)
 
 @app.route('/players', endpoint='listPlayers')
@@ -76,10 +76,10 @@ def listPlayers(conn):
     stmtPlayers = "SELECT * FROM players ORDER BY id DESC"
     cursor.execute(stmtPlayers)
     dfPlayers = pd.DataFrame(cursor.fetchall())
-
-    flash('Players list generated on `host` -> {' + hostName + "}")
     #Assign the column header to the Dataframe
     dfPlayers.columns = [[ 'Player ID', 'Player Name', 'Player Email', 'Player Inventory', 'Player Level', 'Registration Date' ]]
+
+    flash('Players list generated on `host` -> {' + hostName + "}")
     return render_template('games_players.html',  tables=[dfPlayers.to_html(classes='data')], titles=dfPlayers.columns.values)
 
 @app.route("/topThree", endpoint='listTopThree')
@@ -91,10 +91,10 @@ def listTopThree(conn):
     stmtTopPlayers = "SELECT * FROM v_top_leaderboard WHERE rn <= 3 ORDER BY StartTime DESC"
     cursor.execute(stmtTopPlayers)
     dfTopPlayer = pd.DataFrame(cursor.fetchall())
-
-    flash('Leaderboard, TOP 3 for each server, generated on `host` -> {' + hostName + "}")
     #Assign the column header to the Dataframe
     dfTopPlayer.columns = [[ 'Game ID', 'Game Name', 'Player ID', 'Player Name', 'Kills', 'Deaths', 'Ranking' ]]
+
+    flash('Leaderboard, TOP 3 for each server, generated on `host` -> {' + hostName + "}")
     return render_template('games_leaderboard.html',  tables=[dfTopPlayer.to_html(classes='data')], titles=dfTopPlayer.columns.values)
 
 if __name__ == "__main__":
