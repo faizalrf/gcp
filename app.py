@@ -14,6 +14,7 @@ import random
 import time
 
 app = Flask(__name__)
+app.secret_key = "MySuperSecretKey"
 
 #Creates a connection to the CloudSQL database instance
 def connectDB():
