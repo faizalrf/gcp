@@ -3,10 +3,11 @@
 # Team: 6m11 Team1
 # Date 2021-09-02, post midnignt and very tired
 #####################################################
-from flask import Flask, request, render_template, session, redirect
+from flask import Flask, flash, request, render_template, session, redirect
 from datetime import datetime
 import mysql.connector
 import os
+import platform
 import sys
 import string
 import random
@@ -38,18 +39,30 @@ def connectDB():
 # Check if player's data has been generated or not
 @app.route("/", endpoint='rootPage')
 def rootPage():
-    target = os.environ.get('TARGET', 'World')
+    hostName = platform.uname()[1]
+    target = os.environ.get('TARGET', 'World from `host` -> {' + hostName + "}")
     return 'Welcome to the Mountkirk Game UI {}!\n'.format(target)
 
+    return """
+      <h1>Welcome to the Mountkirk Game</h1>
+      <p>- Go to /games to generate a list of all the game rooms</p>
+      <p>- Go to /players to generate a list of all the players registered to Mountkirk game servers</p>
+      <p>- Go to /topThree to generate a list of TOP 3 players from each game</p>
+      <p>.</p>
+      <p>This is where our WEB Developlemt skills end :)</p>
+      """
+    
 @app.route('/games', endpoint='listGames')
-def listGames(conn):
+def listGames():
     import pandas as pd
+    hostName = platform.uname()[1]
+    conn = connectDB()
     cursor = conn.cursor()
     stmtGames = "SELECT * FROM game ORDER BY id DESC" 
     cursor.execute(stmtGames)
     dfGames = pd.DataFrame(cursor.fetchall())
-
-    #Assign the column header as "Game_ID" to the Dataframe
+    flash('Game list generated on `host` -> {' + hostName + "}")
+    #Assign the column header to the Dataframe
     dfGames.columns = [[ 'Game ID', 'Game Name', 'Total Players', 'Start Time', 'End Time' ]]
 
     return render_template('games_list.html',  tables=[dfGames.to_html(classes='data')], titles=dfGames.columns.values)
@@ -57,24 +70,30 @@ def listGames(conn):
 @app.route('/players', endpoint='listPlayers')
 def listPlayers(conn):
     import pandas as pd
+    hostName = platform.uname()[1]
+    conn = connectDB()
     cursor = conn.cursor()
     stmtPlayers = "SELECT * FROM players ORDER BY id DESC"
     cursor.execute(stmtPlayers)
     dfPlayers = pd.DataFrame(cursor.fetchall())
 
-    #Assign the column header as "Game_ID" to the Dataframe
+    flash('Players list generated on `host` -> {' + hostName + "}")
+    #Assign the column header to the Dataframe
     dfPlayers.columns = [[ 'Player ID', 'Player Name', 'Player Email', 'Player Inventory', 'Player Level', 'Registration Date' ]]
-
     return render_template('games_players.html',  tables=[dfPlayers.to_html(classes='data')], titles=dfPlayers.columns.values)
 
 @app.route("/topThree", endpoint='listTopThree')
 def listTopThree(conn):
     import pandas as pd
+    hostName = platform.uname()[1]
+    conn = connectDB()
     cursor = conn.cursor()
     stmtTopPlayers = "SELECT * FROM v_top_leaderboard WHERE rn <= 3 ORDER BY StartTime DESC"
     cursor.execute(stmtTopPlayers)
     dfTopPlayer = pd.DataFrame(cursor.fetchall())
 
+    flash('Leaderboard, TOP 3 for each server, generated on `host` -> {' + hostName + "}")
+    #Assign the column header to the Dataframe
     dfTopPlayer.columns = [[ 'Game ID', 'Game Name', 'Player ID', 'Player Name', 'Kills', 'Deaths', 'Ranking' ]]
     return render_template('games_leaderboard.html',  tables=[dfTopPlayer.to_html(classes='data')], titles=dfTopPlayer.columns.values)
 
