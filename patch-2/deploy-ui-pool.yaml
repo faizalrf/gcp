@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xonotic-ui
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: xonotic-ui
+  template:
+    metadata:
+      labels:
+        app: xonotic-ui
+    spec:
+      containers:
+      - name: hello
+        image: "gcr.io/google-samples/hello-app:2.0"
+        ports:
+        - containerPort: 8080
+      nodeSelector:
+        pool: xonotic-ui-pool
