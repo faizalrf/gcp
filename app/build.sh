@@ -6,7 +6,7 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 # remove all local images
-docker images -a | grep "leaderboard" | awk '{print $3}' | xargs docker rmi
+docker rmi $(docker images -a -q) -f
 
 # remove GCR images
 gcloud container images delete gcr.io/group1-6m11/x-leaderboard:v1
