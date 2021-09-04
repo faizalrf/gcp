@@ -74,7 +74,7 @@ def listPlayers():
     import pandas as pd
     conn = connectDB()
     cursor = conn.cursor()
-    stmtPlayers = "SELECT * FROM players ORDER BY id DESC"
+    stmtPlayers = "SELECT * FROM player ORDER BY id DESC"
     cursor.execute(stmtPlayers)
     dfPlayers = pd.DataFrame(cursor.fetchall())
     #Assign the column header to the Dataframe
@@ -95,7 +95,7 @@ def listTopThree():
     cursor.execute(stmtTopPlayers)
     dfTopPlayer = pd.DataFrame(cursor.fetchall())
     #Assign the column header to the Dataframe
-    dfTopPlayer.columns = [[ 'Game ID', 'Game Name', 'Player ID', 'Player Name', 'Kills', 'Deaths', 'Ranking' ]]
+    dfTopPlayer.columns = [[ 'Game ID', 'Game Name', 'Start Time', 'Player ID', 'Player Name', 'Kills', 'Deaths', 'Ranking' ]]
 
     #flash('Leaderboard, TOP 3 for each server, generated on `host` -> {' + hostName + "}")
     return render_template('games_leaderboard.html',  tables=[dfTopPlayer.to_html(classes='data')], titles=dfTopPlayer.columns.values, hostName = platform.uname()[1])
