@@ -41,16 +41,16 @@ def connectDB():
 def rootPage():
     hostName = platform.uname()[1]
     target = os.environ.get('TARGET', 'World from `host` -> {' + hostName + "}")
-    return 'Welcome to the Mountkirk Game UI {}!\n'.format(target)
+    #return 'Welcome to the Mountkirk Game UI {}!\n'.format(target)
 
     return """
-      <h1>Welcome to the Mountkirk Game</h1>
+      <h1>Welcome to the Mountkirk Game from {}!</h1>
       <p>- Go to /games to generate a list of all the game rooms</p>
       <p>- Go to /players to generate a list of all the players registered to Mountkirk game servers</p>
       <p>- Go to /topThree to generate a list of TOP 3 players from each game</p>
       <p>.</p>
       <p>This is where our WEB Developlemt skills end :)</p>
-      """
+      """.format(target)
     
 @app.route('/games', endpoint='listGames')
 def listGames():
