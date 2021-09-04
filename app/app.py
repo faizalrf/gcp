@@ -81,7 +81,10 @@ def listPlayers():
     dfPlayers.columns = [[ 'Player ID', 'Player Name', 'Player Email', 'Player Inventory', 'Player Level', 'Registration Date' ]]
 
     #flash('Players list generated on `host` -> {' + hostName + "}")
-    return render_template('games_players.html',  tables=[dfPlayers.to_html(classes='data')], titles=dfPlayers.columns.values, hostName=platform.uname()[1])
+    if len(dfPlayers) > 0:
+        return render_template('games_players.html',  tables=[dfPlayers.to_html(classes='data')], titles=dfPlayers.columns.values, hostName=platform.uname()[1])
+    else:
+        return render_template('error.html', hostName=platform.uname()[1], ErrDesc="Please register some players!")
 
 @app.route("/topThree", endpoint='listTopThree')
 def listTopThree():
@@ -96,6 +99,24 @@ def listTopThree():
 
     #flash('Leaderboard, TOP 3 for each server, generated on `host` -> {' + hostName + "}")
     return render_template('games_leaderboard.html',  tables=[dfTopPlayer.to_html(classes='data')], titles=dfTopPlayer.columns.values, hostName = platform.uname()[1])
+
+def validatePlayers(conn):
+    import pandas as pd
+
+    cursor = conn.cursor()
+    stmtPlayerCheck = "SELECT count(*) AS Players FROM player"
+    cursor.execute(stmtPlayerCheck)
+    dfPlayer = pd.DataFrame(cursor.fetchall())
+
+    #Assign the column header as "Game_ID" to the Dataframe
+    dfPlayer.columns = [[ 'player_count' ]]
+
+    #Read the Game_ID from the Dataframe
+    playerCount = 0
+    if len(dfPlayer) > 0:
+        playerCount = dfPlayer.loc[0]['player_count']
+    
+    return (playerCount > 0)
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))

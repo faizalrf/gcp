@@ -5,7 +5,7 @@
     <title>Mountkirk Games, List of Top 3 Players</title>
 </head>
 <body>
-    <h1>Greetings from your `host` -> {{ hostName }}!</h1>
+    <p>Greetings from your `host` -> {{ hostName }}!</p>
     {% for table in tables %}
             {{titles[loop.index]}}
             {{ table|safe }}
