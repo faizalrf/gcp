@@ -14,11 +14,12 @@ spec:
     spec:
       containers:
       - name: x-leaderboard
-        image: "gcr.io/group1-6m11/x-leaderboard:v9"
+        image: "gcr.io/group1-6m11/x-leaderboard:v1"
         ports:
         - containerPort: 8080
         env:
           - name: PORT
             value: "8080"
       nodeSelector:
-        pool: xonotic-ui-pool            
+        pool: xonotic-ui-pool 
+
