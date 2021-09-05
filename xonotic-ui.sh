@@ -1,21 +1,17 @@
-gcloud beta container --project group1-6m11 clusters create xonotic-ui \
+gcloud container --project group1-6m11 node-pools create xonotic-ui-pool \
+--cluster xonotic-game \
 --region asia-southeast1 \
---cluster-version 1.20.8-gke.900 \
 --tags=game-ui \
 --machine-type e2-medium \
 --image-type "COS_CONTAINERD" \
 --disk-type "pd-standard" --disk-size 100 \
 --service-account "group1@group1-6m11.iam.gserviceaccount.com" \
 --num-nodes 1 \
---logging=SYSTEM,WORKLOAD \
---monitoring=SYSTEM \
---enable-ip-alias --network "projects/group1-6m11/global/networks/demo-vpc" \
---subnetwork "projects/group1-6m11/regions/asia-southeast1/subnetworks/subnet-sg" \
 --enable-autoscaling --min-nodes 1 --max-nodes 3 \
---addons HorizontalPodAutoscaling,HttpLoadBalancing,NodeLocalDNS,GcePersistentDiskCsiDriver \
 --no-enable-autoupgrade \
 --enable-autorepair \
 --max-surge-upgrade 1 \
 --max-unavailable-upgrade 0 \
---enable-shielded-nodes --shielded-secure-boot --shielded-integrity-monitoring \
---node-locations "asia-southeast1-a","asia-southeast1-b","asia-southeast1-c"
+--shielded-secure-boot --shielded-integrity-monitoring \
+--node-locations "asia-southeast1-a","asia-southeast1-b","asia-southeast1-c" \
+--node-labels=pool=xonotic-ui-pool
