@@ -1,6 +1,6 @@
 gcloud container --project group1-6m11 node-pools create xonotic-ui-pool \
---cluster xonotic-game \
---region asia-southeast1 \
+--cluster xonotic-game-us \
+--region us-central1 \
 --tags=game-ui \
 --machine-type e2-medium \
 --image-type "COS_CONTAINERD" \
@@ -13,5 +13,5 @@ gcloud container --project group1-6m11 node-pools create xonotic-ui-pool \
 --max-surge-upgrade 1 \
 --max-unavailable-upgrade 0 \
 --shielded-secure-boot --shielded-integrity-monitoring \
---node-locations "asia-southeast1-a","asia-southeast1-b","asia-southeast1-c" \
+--node-locations "us-central1-a","us-central1-b","us-central1-c" \
 --node-labels=pool=xonotic-ui-pool
