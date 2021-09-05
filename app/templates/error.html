@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+
     <h1>ERROR!</h1>
-    <p>Greetings from your `host` -> {{ hostName }}!</p>
-    <p>There is an Error in your Form {{ ErrDesc }}</p>
-</body>
-</html>
+    <h2>There is an Error in your Form {{ ErrDesc }}</h2>
+
+{% endblock %}

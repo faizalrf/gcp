@@ -1,13 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+
     <h1>Welcome to Mountkirk Games</h1>
-    <p>Greetings from your `host` -> {{ hostName }}!</p>
-    <p>- Go to /games to see the list of all the game rooms ever created</p>
-    <p>- Go to /players to see the list of all the players registered in Mountkirk servers</p>
-    <p>- Go to /topThree to see the list of TOP 3 players for each game session</p>
-</body>
-</html>
+    <h3>Greetings from your `host` -> {{ hostName }}!</h2>
+    <br/>
+
+    <div id="muteYouTubeVideoPlayer"></div>
+    <script async src="https://www.youtube.com/iframe_api"></script>
+    <script>
+    function onYouTubeIframeAPIReady() {
+    var player;
+    player = new YT.Player('muteYouTubeVideoPlayer', {
+        videoId: 'zeHWVpgn8bU', // YouTube Video ID
+        width: 560,               // Player width (in px)
+        height: 316,              // Player height (in px)
+        playerVars: {
+        autoplay: 1,        // Auto-play the video on load
+        controls: 1,        // Show pause/play buttons in player
+        showinfo: 0,        // Hide the video title
+        modestbranding: 1,  // Hide the Youtube Logo
+        loop: 1,            // Run the video in a loop
+        fs: 0,              // Hide the full screen button
+        cc_load_policy: 0, // Hide closed captions
+        iv_load_policy: 3,  // Hide the Video Annotations
+        autohide: 0         // Hide video controls when playing
+        },
+        events: {
+        onReady: function(e) {
+            e.target.mute();
+        }
+        }
+    });
+    }
+    // Written by @labnol 
+    </script>
+    
+{% endblock %}

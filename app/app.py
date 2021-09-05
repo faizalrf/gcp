@@ -31,7 +31,8 @@ def connectDB():
     conn = mysql.connector.connect(
         user="game_user",
         password="password",
-        host='10.29.182.5',
+        #host='10.29.182.5',
+        host='127.0.0.1',
         db="xonoticdb"
     )
     print("Connection to the Database successful!!!\n")
@@ -76,6 +77,25 @@ def listPlayers():
     else:
         return render_template('error.html', hostName=platform.uname()[1], ErrDesc="Please register some players!")
 
+@app.route('/gameplayers', endpoint='listGamePlayers')
+def listGamePlayers():
+    import pandas as pd
+    conn = connectDB()
+    cursor = conn.cursor()
+    stmtGamePlayers = "SELECT * FROM v_game_players ORDER BY id DESC, PlayerName"
+    cursor.execute(stmtGamePlayers)
+    dfGamePlayers = pd.DataFrame(cursor.fetchall())
+    #Assign the column header to the Dataframe
+    dfGamePlayers.columns = [[ 'Game ID', 'Game Name', 'Start Time', 'Player ID', 'Player Name', 'Player Level' ]]
+
+    # Formatting duplicates
+    dfGamePlayers.loc[dfGamePlayers['Game ID'].duplicated(), ['Game ID','Game Name','Start Time']] = '-'
+    #flash('Players list generated on `host` -> {' + hostName + "}")
+    if len(dfGamePlayers) > 0:
+        return render_template('games_players.html',  tables=[dfGamePlayers.to_html(classes='data')], titles=dfGamePlayers.columns.values, hostName=platform.uname()[1])
+    else:
+        return render_template('error.html', hostName=platform.uname()[1], ErrDesc="Please register some players!")
+
 @app.route("/topThree", endpoint='listTopThree')
 def listTopThree():
     import pandas as pd
@@ -87,8 +107,19 @@ def listTopThree():
     #Assign the column header to the Dataframe
     dfTopPlayer.columns = [[ 'Game ID', 'Game Name', 'Start Time', 'Player ID', 'Player Name', 'Kills', 'Deaths', 'Ranking' ]]
 
+    # Formatting duplicates
+    dfTopPlayer.loc[dfTopPlayer['Game ID'].duplicated(), ['Game ID','Game Name','Start Time']] = '-'
     #flash('Leaderboard, TOP 3 for each server, generated on `host` -> {' + hostName + "}")
     return render_template('games_leaderboard.html',  tables=[dfTopPlayer.to_html(classes='data')], titles=dfTopPlayer.columns.values, hostName = platform.uname()[1])
+
+# Error Handling Code
+@app.errorhandler(404)
+def pageNotFound(ex):
+    return render_template("error-404.html"), 404
+
+@app.errorhandler(500)
+def internalServerError(ex):
+    return render_template("error-500.html"), 500
 
 def validatePlayers(conn):
     import pandas as pd

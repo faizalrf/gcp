@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-    <h1>Mountkirk Games, List of Registered Players</h1>
-    <p>Greetings from your `host` -> {{ hostName }}!</p>
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1>Mountkirk Games</h1>
+    <h2>Greetings from your `host` -> {{ hostName }}!</h2>
+    <br/>
+    <h3>List of Registered Players</h3>
     {% for table in tables %}
             {{titles[loop.index]}}
             {{ table|safe }}
     {% endfor %}
-</body>
-</html>
+
+{% endblock %}

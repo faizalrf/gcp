@@ -7,6 +7,7 @@
 from datetime import datetime
 import mysql.connector
 import sys
+import os
 import string
 import random
 import time
@@ -52,11 +53,11 @@ def connectDB():
     conn = mysql.connector.connect(
         user="game_user",
         password="password",
-        host='10.29.182.5',
+        #host='10.29.182.5',
+        host='127.0.0.1',
         db="xonoticdb"
     )
-
-    print("Connection to the Database successful!!!\n")
+    print("Connection to the Database successful!!!")
     return conn
 
 def testConnection():
@@ -167,7 +168,7 @@ def battleOn(conn, playerList, gameID):
                         str(gameID) + ", " + str(randomPlayerID) + ", " + str(randomKillerID) + ", current_timestamp(6))"
 
         cursor.execute(stmtKill)
-        time.sleep(random.randrange(0, 1))
+        time.sleep(random.randrange(0, 2))
         print("Game Progress: ", str(round(totalEvents/maxKills*100))+"%", end="\r")
         conn.commit()
 
