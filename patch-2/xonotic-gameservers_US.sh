@@ -4,6 +4,8 @@ kubectl create namespace agones-system
 
 kubectl apply -f https://raw.githubusercontent.com/googleforgames/agones/release-1.16.0/install/yaml/install.yaml
 
+sleep 1m
+
 kubectl get --namespace agones-system pods
 
 gcloud game servers realms create realm-xonotic-us \

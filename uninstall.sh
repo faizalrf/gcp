@@ -13,9 +13,12 @@ then
 
   yes | gcloud game servers deployments delete deployment-xonotic
 
-  yes | gcloud game servers realms delete realm-xonotic
+  yes | gcloud game servers clusters delete cluster-xonotic \
+  --realm=realm-xonotic --no-dry-run --location=asia-southeast1
+
+  yes | gcloud game servers realms delete realm-xonotic --location=asia-southeast1
 	
-  yes | gcloud container clusters delete xonotic-game --region=asia-central1
+  yes | gcloud container clusters delete xonotic-game --region=asia-southeast1
 else
   exit 0
 fi
