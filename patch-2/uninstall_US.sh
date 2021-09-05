@@ -1,8 +1,10 @@
 read -p "Are you sure you want to continue delete? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
+  ~/gcp/patch-2/config-xonotic-game_US.sh
+  
   # ~/gcp/patch-sample-ui-yaml/delete-ui.sh
-
+    
   ~/gcp/app/delete.sh
 
   # yes | gcloud compute firewall-rules delete gcgs-xonotic-firewall
@@ -20,7 +22,7 @@ then
 
   yes | gcloud game servers realms delete realm-xonotic-us --location=us-central1
 	
-	yes | gcloud container clusters delete xonotic-game-us --region=us-central1
+  yes | gcloud container clusters delete xonotic-game-us --region=us-central1
 else
   exit 0
 fi
