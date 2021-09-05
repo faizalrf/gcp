@@ -1,7 +1,9 @@
 read -p "Are you sure you want to continue delete? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
-  ~/gcp/patch-sample-ui-yaml/delete-ui.sh
+  # ~/gcp/patch-sample-ui-yaml/delete-ui.sh
+
+  ~/gcp/app/delete.sh
 
   # yes | gcloud compute firewall-rules delete gcgs-xonotic-firewall
 
