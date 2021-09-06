@@ -1,3 +1,3 @@
-kubectl apply -f ~/gcp/app/deploy.yaml
-kubectl apply -f ~/gcp/app/deploy-lb.yaml
-kubectl apply -f ~/gcp/app/deploy-ingress.yaml
+kubectl apply -f deploy.yaml
+kubectl apply -f deploy-lb.yaml
+kubectl apply -f deploy-ingress.yaml
