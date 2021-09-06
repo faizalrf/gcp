@@ -2,16 +2,20 @@
 {% block content %}
 
     <h1>Welcome to Mountkirk Games</h1>
-    <h3>Greetings from your `host` -> {{ hostName }}!</h2>
+    <h3>Greetings from your `host` -> {{ hostName }}!</h3>
     <br/>
-
+    <h5> > Connect to one of the following Game Servers< </h5>
+    <p>SG: 34.87.175.75:7230</p>
+    <p>US: 34.133.167.90:7608</p>
+    <p>Have Fun! But not too much, okay!</p>
+    <br/>
     <div id="muteYouTubeVideoPlayer"></div>
     <script async src="https://www.youtube.com/iframe_api"></script>
     <script>
     function onYouTubeIframeAPIReady() {
     var player;
     player = new YT.Player('muteYouTubeVideoPlayer', {
-        videoId: 'zeHWVpgn8bU', // YouTube Video ID
+        videoId: '9Zsp1ahGgWE', // YouTube Video ID
         width: 560,               // Player width (in px)
         height: 316,              // Player height (in px)
         playerVars: {
