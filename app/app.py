@@ -112,6 +112,22 @@ def listTopThree():
     #flash('Leaderboard, TOP 3 for each server, generated on `host` -> {' + hostName + "}")
     return render_template('games_leaderboard.html',  tables=[dfTopPlayer.to_html(classes='data')], titles=dfTopPlayer.columns.values, hostName = platform.uname()[1])
 
+@app.route("/topFive", endpoint='listTopFive')
+def listTopFive():
+    import pandas as pd
+    conn = connectDB()
+    cursor = conn.cursor()
+    stmtTopPlayers = "SELECT * FROM v_top_leaderboard WHERE rn <= 5 ORDER BY StartTime DESC"
+    cursor.execute(stmtTopPlayers)
+    dfTopPlayer = pd.DataFrame(cursor.fetchall())
+    #Assign the column header to the Dataframe
+    dfTopPlayer.columns = [[ 'Game ID', 'Game Name', 'Start Time', 'Player ID', 'Player Name', 'Kills', 'Deaths', 'Ranking' ]]
+
+    # Formatting duplicates
+    dfTopPlayer.loc[dfTopPlayer['Game ID'].duplicated(), ['Game ID','Game Name','Start Time']] = '-'
+    #flash('Leaderboard, TOP 3 for each server, generated on `host` -> {' + hostName + "}")
+    return render_template('games_leaderboard.html',  tables=[dfTopPlayer.to_html(classes='data')], titles=dfTopPlayer.columns.values, hostName = platform.uname()[1])
+
 # Error Handling Code
 @app.errorhandler(404)
 def pageNotFound(ex):
