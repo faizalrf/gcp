@@ -31,8 +31,8 @@ def connectDB():
     conn = mysql.connector.connect(
         user="game_user",
         password="password",
-        #host='10.29.182.5',
-        host='127.0.0.1',
+        host='10.29.182.5',
+        #host='127.0.0.1',
         db="xonoticdb"
     )
     print("Connection to the Database successful!!!\n")

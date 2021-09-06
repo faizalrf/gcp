@@ -5,16 +5,12 @@ if [ "$#" -ne 1 ]; then
     echo
     exit 1
 fi
-# remove all local images
-# docker rmi $(docker images -a -q) -f
 
-# remove GCR images
-gcloud container images delete gcr.io/group1-6m11/x-leaderboard:v1
-
-kubectl delete -f ./deploy.yaml
-kubectl delete -f ./deploy-lb.yaml
 docker build -t x-leaderboard:v${Version} .
 docker tag x-leaderboard:v${Version} gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v${Version}
+
+gcloud container clusters get-credentials xonotic-game --region asia-southeast1 --project group1-6m11
 docker push gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v${Version}
-kubectl apply -f ./deploy.yaml
-kubectl apply -f ./deploy-lb.yaml
+
+gcloud container clusters get-credentials xonotic-game-us --region us-central1 --project group1-6m11
+docker push gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v${Version}

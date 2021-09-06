@@ -7,4 +7,4 @@ gunicorn
 mysql-connector-python
 google.cloud.secret.manager
 pandas
-python-dotenv
+

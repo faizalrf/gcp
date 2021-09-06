@@ -165,6 +165,36 @@ To remove the deployments
 - `kubectl delete -f ./deploy.yaml`
 - `kubectl delete -f ./deploy-lb.yaml`
 
+```
+faisal_6m11@cloudshell:~ (group1-6m11)$ gcloud container clusters get-credentials xonotic-game-us --region us-central1 --project group1-6m11
+Fetching cluster endpoint and auth data.
+kubeconfig entry generated for xonotic-game-us.
+faisal_6m11@cloudshell:~ (group1-6m11)$ kubectl get ingress
+NAME         CLASS    HOSTS   ADDRESS         PORTS   AGE
+xonotic-ui   <none>   *       35.241.63.181   80      12h
+faisal_6m11@cloudshell:~ (group1-6m11)$ gcloud container clusters get-credentials xonotic-game --region asia-southeast1 --project group1-6m11
+Fetching cluster endpoint and auth data.
+kubeconfig entry generated for xonotic-game.
+faisal_6m11@cloudshell:~ (group1-6m11)$ kubectl get ingress
+NAME         CLASS    HOSTS   ADDRESS          PORTS   AGE
+xonotic-ui   <none>   *       34.102.207.237   80      22h
+faisal_6m11@cloudshell:~ (group1-6m11)$ kubectl get gameserver
+NAME                                            STATE   ADDRESS        PORT   NODE                                          AGE
+fleet-deployment-xonotic-config-1-bmgfj-sqt52   Ready   34.87.175.75   7230   gke-xonotic-game-default-pool-9581e4ff-mr8z   22h
+```
+
+### Cloud Source Repo
+
+```
+gcloud source repos create xonotic-app
+gcloud source repos clone xonotic-app --project=group1-6m11
+git config --global user.email "faisal.6m11@gmail.com"
+git config --global user.name "Faisal 6m11"
+git add *
+git commit -m "Init"
+git push -u origin master
+```
+
 ## CloudSQL
 
 Connect to the CloudSQL instance and execute the following commands to create a `game_user` within the database. 
