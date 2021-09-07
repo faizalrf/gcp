@@ -57,7 +57,7 @@ def listGames():
     #Assign the column header to the Dataframe
     dfGames.columns = [[ 'Game ID', 'Game Name', 'Total Players', 'Start Time', 'End Time' ]]
     if dfGames.empty:
-        return render_template('error.html', hostName=platform.uname()[1], ErrDesc='No Data Found!')
+        return render_template('error.html', hostName=platform.uname()[1], ErrDesc='No Game Data Found!')
     
     #flash('Game list generated on `host` -> {' + hostName + "}")
     return render_template('games_list.html',  tables=[dfGames.to_html(classes='data')], titles=dfGames.columns.values, hostName=platform.uname()[1])
