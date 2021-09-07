@@ -1,5 +1,7 @@
 # Mountkirk Game Implementation 6m11
 
+This readme discusses how the deployment is done for the GKE cluster and the backend database.
+
 Start by the following two to set the user and project in cloud shell.
 
 ```
@@ -7,183 +9,259 @@ $ gcloud auth list
 $ gcloud config list project
 ```
 
-To check debug logs of a VM, the following command is handy
+Import the Kuberbetes magic to the cloud shell
 
 ```
-$ gcloud compute instances tail-serial-port-output template-vm --zone=us-central1-a
-```
-
-Here `template-vm` is the VM name, change accordingly.
-
-Set up GKE environment with the following
-
-```
-source <(kubectl completion bash)
+$ source <(kubectl completion bash)
 ```
 
 ## GKE
 
 ### Create Game Cluster
 
-Provided in this repo as `xonotic-game.sh` execute it as `./xonotic-game.sh`
+Execute the `install.sh` from the root folder, the script calls the following 
 
 ```
-$ gcloud beta container --project group1-6m11 clusters create xonotic-game \
---region asia-southeast1 \
---cluster-version 1.20.8-gke.900 \
---machine-type e2-standard-2 \
---image-type "COS_CONTAINERD" \
---disk-type "pd-standard" --disk-size 100 \
---service-account "group1@group1-6m11.iam.gserviceaccount.com" \
---num-nodes 1 \
---logging=SYSTEM,WORKLOAD \
---monitoring=SYSTEM \
---enable-ip-alias --network "projects/group1-6m11/global/networks/demo-vpc" \
---subnetwork "projects/group1-6m11/regions/asia-southeast1/subnetworks/subnet-sg" \
---enable-autoscaling --min-nodes 1 --max-nodes 3 \
---addons HorizontalPodAutoscaling,HttpLoadBalancing,NodeLocalDNS,GcePersistentDiskCsiDriver \
---no-enable-autoupgrade \
---enable-autorepair \
---max-surge-upgrade 1 \
---max-unavailable-upgrade 0 \
---enable-shielded-nodes --shielded-secure-boot --shielded-integrity-monitoring \
---node-locations "asia-southeast1-a","asia-southeast1-b","asia-southeast1-c"
+./xonotic-game.sh
+./config-xonotic-game.sh
+./xonotic-gameservers.sh
+./xonotic-ui.sh
+./app/deploy.sh
 ```
 
-### Create UI Cluster
+- `xonotic-game.sh`
 
-Provided in this repo as `xonotic-ui.sh` execute it as `./xonotic-ui.sh`
+  This deploys the xonotic game GKE cluster in the `asia-southeast1` Singapore based on `e2-standard-2` with auto scaling, using the custom `demo-vpc`, and dedicated all three Singapore ZONES
 
-```
-$ gcloud beta container --project group1-6m11 clusters create xonotic-ui \
---region asia-southeast1 \
---cluster-version 1.20.8-gke.900 \
---machine-type e2-medium \
---image-type "COS_CONTAINERD" \
---disk-type "pd-standard" --disk-size 100 \
---service-account "group1@group1-6m11.iam.gserviceaccount.com" \
---num-nodes 1 \
---logging=SYSTEM,WORKLOAD \
---monitoring=SYSTEM \
---enable-ip-alias --network "projects/group1-6m11/global/networks/demo-vpc" \
---subnetwork "projects/group1-6m11/regions/asia-southeast1/subnetworks/subnet-sg" \
---enable-autoscaling --min-nodes 1 --max-nodes 3 \
---addons HorizontalPodAutoscaling,HttpLoadBalancing,NodeLocalDNS,GcePersistentDiskCsiDriver \
---no-enable-autoupgrade \
---enable-autorepair \
---max-surge-upgrade 1 \
---max-unavailable-upgrade 0 \
---enable-shielded-nodes --shielded-secure-boot --shielded-integrity-monitoring \
---node-locations "asia-southeast1-a","asia-southeast1-b","asia-southeast1-c"
-```
+  ```
+  gcloud beta container --project group1-6m11 clusters create xonotic-game \
+  --region asia-southeast1 \
+  --cluster-version 1.20.8-gke.900 \
+  --tags=game-server \
+  --scopes=gke-default \
+  --machine-type e2-standard-2 \
+  --image-type "COS_CONTAINERD" \
+  --disk-type "pd-standard" --disk-size 100 \
+  --service-account "group1@group1-6m11.iam.gserviceaccount.com" \
+  --num-nodes 1 \
+  --logging=SYSTEM,WORKLOAD \
+  --monitoring=SYSTEM \
+  --enable-ip-alias --network "projects/group1-6m11/global/networks/demo-vpc" \
+  --subnetwork "projects/group1-6m11/regions/asia-southeast1/subnetworks/subnet-sg" \
+  --enable-autoscaling --min-nodes 1 --max-nodes 3 \
+  --addons HorizontalPodAutoscaling,HttpLoadBalancing,NodeLocalDNS,GcePersistentDiskCsiDriver \
+  --no-enable-autoupgrade \
+  --enable-autorepair \
+  --max-surge-upgrade 1 \
+  --max-unavailable-upgrade 0 \
+  --enable-shielded-nodes --shielded-secure-boot --shielded-integrity-monitoring \
+  --node-locations "asia-southeast1-a","asia-southeast1-b","asia-southeast1-c"
+  ```
 
-### Build the UI
+- `config-xonotic-game.sh`
+  
+  This connects to the newly provisioned `xonotic-game` cluster
+  
+  ```
+  export region_name=asia-southeast1
+  export cluster_name=xonotic-game
+  gcloud container clusters get-credentials $cluster_name --region $region_name
+  ```
 
-```
-$ docker build -t x-leaderboard:v1 .
-$ docker tag x-leaderboard:v1 gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v1
-$ docker push gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v1
-```
+- `xonotic-gameservers.sh`
+  
+  This deploys the actual Xonotic Game on to the cluster, configure the namespace Realms, sets up the firewall for connectivity and finally gets the IP and port of the game server using `kubectl get gameserver`
 
-***Note:** This should already be built, no need to repeat this step*
+  ```
+  gcloud container clusters get-credentials xonotic-game --region=asia-southeast1
 
-### Deploy UI App
+  kubectl create namespace agones-system
 
-Once the clusters are ready, we can now deploy the test app
+  kubectl apply -f https://raw.githubusercontent.com/googleforgames/agones/release-1.16.0/install/yaml/install.yaml
 
-```
-$ export region_name=asia-southeast1
-$ export cluster_name=xonotic-ui
-$ gcloud container clusters get-credentials $cluster_name --region $region_name
-```
+  sleep 1m
 
-Two files provided `deploy.yaml` and `deploy_lb.yaml`
+  kubectl get --namespace agones-system pods
 
-`deploy.yaml` should have the following content
+  gcloud game servers realms create realm-xonotic \
+  --time-zone Singapore \
+  --location asia-southeast1
 
-```
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: xonotic-ui
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: xonotic-ui
-  template:
+  gcloud game servers clusters create cluster-xonotic \
+  --realm=realm-xonotic \
+  --gke-cluster locations/asia-southeast1/clusters/xonotic-game \
+  --namespace=default \
+  --location asia-southeast1 \
+  --no-dry-run
+
+  gcloud game servers deployments create deployment-xonotic
+
+  gcloud game servers configs create config-1 \
+  --deployment deployment-xonotic \
+  --fleet-configs-file xonotic_fleet_configs.yaml \
+  --scaling-configs-file xonotic_scaling_configs.yaml
+
+  gcloud game servers deployments update-rollout deployment-xonotic \
+  --default-config config-1 --no-dry-run
+
+  kubectl get fleet
+
+  gcloud compute firewall-rules create gcgs-xonotic-firewall \
+  --network demo-vpc \
+  --allow udp:7000-8000 \
+  --target-tags game-server \
+  --description "Firewall to allow game server udp traffic"
+
+  kubectl get gameserver
+  ```
+
+- `xonotic-ui.sh`
+
+  This configures the Xonotic UI Pool within the `xonotic-game` cluster. With the same setup as the Xonotic Game pool with REGION as `asia-southeast1` and ZONES dedicated to all three for Singapore.
+
+  ```
+  gcloud container --project group1-6m11 node-pools create xonotic-ui-pool \
+  --cluster xonotic-game \
+  --region asia-southeast1 \
+  --tags=game-ui \
+  --machine-type e2-medium \
+  --image-type "COS_CONTAINERD" \
+  --disk-type "pd-standard" --disk-size 100 \
+  --service-account "group1@group1-6m11.iam.gserviceaccount.com" \
+  --num-nodes 1 \
+  --enable-autoscaling --min-nodes 1 --max-nodes 3 \
+  --no-enable-autoupgrade \
+  --enable-autorepair \
+  --max-surge-upgrade 1 \
+  --max-unavailable-upgrade 0 \
+  --shielded-secure-boot --shielded-integrity-monitoring \
+  --node-locations "asia-southeast1-a","asia-southeast1-b","asia-southeast1-c" \
+  --node-labels=pool=xonotic-ui-pool
+  ```
+
+- `deploy.sh`
+
+  This script builds the local UI app container for SG clusters and pushes it to Google Container Registry `gcr.io` finally applys the YAML files to actually deploy this container on to the GKE cluster UI node pool, sets uo load balancer with the help of ingress.
+
+  ```
+  docker build -t x-leaderboard:v${Version} .
+  docker tag x-leaderboard:v${Version} gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v${Version}
+
+  gcloud container clusters get-credentials xonotic-game --region asia-southeast1 --project group1-6m11
+  docker push gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v${Version}
+
+  kubectl apply -f deploy.yaml
+  kubectl apply -f deploy-lb.yaml
+  kubectl apply -f deploy-ingress.yaml
+  ```
+
+  - `deploy.yaml`
+    ```
+    apiVersion: apps/v1
+    kind: Deployment
     metadata:
-      labels:
-        app: xonotic-ui
+      name: xonotic-ui
     spec:
-      containers:
-      - name: hello-world
-        image: "gcr.io/group1-6m11/x-leaderboard:v1"
-        ports:
-        - containerPort: 8080
-        env:
-          - name: PORT
-            value: "8080"
-```
+      replicas: 3
+      selector:
+        matchLabels:
+          app: xonotic-ui
+      template:
+        metadata:
+          labels:
+            app: xonotic-ui
+        spec:
+          containers:
+          - name: x-leaderboard
+            image: "gcr.io/group1-6m11/x-leaderboard:v1"
+            ports:
+            - containerPort: 8080
+            env:
+              - name: PORT
+                value: "8080"
+          nodeSelector:
+            pool: xonotic-ui-pool 
+    ```
 
-This will deploy the `x-leaderboard` app to the xonotic-ui.
+  - deploy-lb.yaml
+    
+    To deplloy the Load balancer that listens on port `80`, internally connecting to the app on `8080`
 
-`deploy_lb.yaml` should contain the following. 
+    ```
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: xonotic-ui
+    spec:
+      type: NodePort
+      ports:
+      - port: 80
+        targetPort: 8080
+      selector:
+        app: xonotic-ui
+    ```
 
-```
-apiVersion: v1
-kind: Service
-metadata:
-  name: xonotic-ui
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 8080
-  selector:
-    app: xonotic-ui
-```
+  - `deploy-ingress.yaml`
 
-This will deplopy a HTTP LoadBalancer to connect to the `xonotic-ui` cluster
+    This links them all together by defining an ingress load balancer exposing the IP for the outside world
 
-#### Deployment
+    ```
+    apiVersion: networking.k8s.io/v1beta1
+    kind: Ingress
+    metadata:
+      name: xonotic-ui
+      annotations:
+        kubernetes.io/ingress.class: gce
+    spec:
+      rules:
+      - http:
+          paths:
+          - path: /*
+            backend:
+              serviceName: xonotic-ui
+              servicePort: 80
+    ```
 
-To deploy the UI app, `deploy.yaml` and `deploy-lb.yaml`
+Finally there is an `uninstall.sh` that can uninstall the entire setup with just one execution.
 
-- `kubectl apply -f ./deploy.yaml`
-- `kubectl apply -f ./deploy-lb.yaml`
-
-Check the deployment status and pods / services
+Once the above is done, we can execute the following to get the current app deployment status and the status of the cluster pods
 
 ```
 $ kubectl get deployments
 $ kubectl get svc,pods
 ```
 
-To remove the deployments
-
-- `kubectl delete -f ./deploy.yaml`
-- `kubectl delete -f ./deploy-lb.yaml`
+Use the following to connect to the SG GKE cluster and to get the Load Balancer IP address / Port for the UI
 
 ```
-faisal_6m11@cloudshell:~ (group1-6m11)$ gcloud container clusters get-credentials xonotic-game-us --region us-central1 --project group1-6m11
-Fetching cluster endpoint and auth data.
-kubeconfig entry generated for xonotic-game-us.
-faisal_6m11@cloudshell:~ (group1-6m11)$ kubectl get ingress
-NAME         CLASS    HOSTS   ADDRESS         PORTS   AGE
-xonotic-ui   <none>   *       35.241.63.181   80      12h
-faisal_6m11@cloudshell:~ (group1-6m11)$ gcloud container clusters get-credentials xonotic-game --region asia-southeast1 --project group1-6m11
-Fetching cluster endpoint and auth data.
-kubeconfig entry generated for xonotic-game.
-faisal_6m11@cloudshell:~ (group1-6m11)$ kubectl get ingress
+$ gcloud container clusters get-credentials xonotic-game --region asia-southeast1 --project group1-6m11
+$ kubectl get ingress
+
 NAME         CLASS    HOSTS   ADDRESS          PORTS   AGE
 xonotic-ui   <none>   *       34.102.207.237   80      22h
-faisal_6m11@cloudshell:~ (group1-6m11)$ kubectl get gameserver
-NAME                                            STATE   ADDRESS        PORT   NODE                                          AGE
-fleet-deployment-xonotic-config-1-bmgfj-sqt52   Ready   34.87.175.75   7230   gke-xonotic-game-default-pool-9581e4ff-mr8z   22h
 ```
 
+Use the following to connect to the SG GKE cluster and to get the IP and Port for the Xonotic Game
+
+```
+$ gcloud container clusters get-credentials xonotic-game --region asia-southeast1 --project group1-6m11
+$ kubectl get gameserver
+
+NAME         CLASS    HOSTS   ADDRESS          PORTS   AGE
+xonotic-ui   <none>   *       34.102.207.237   80      22h
+```
+
+If we want to push new changes to the app, we can use the following two command, but ensure to update the build tag appropriately.
+
+- `kubectl apply -f ./deploy.yaml`
+
+To remove the deployment, by simply executing the following `delete` command. This will remove the app from the GKE UI pools.
+
+- `kubectl delete -f ./deploy.yaml`
+
 ### Cloud Source Repo
+
+Cloud source repository is used to setup and automate build and deployment for the UI component. To set up the repository locally using GCLOUD SDK either on the cloud shell or locally 
 
 ```
 gcloud source repos create xonotic-app
@@ -191,11 +269,12 @@ gcloud source repos clone xonotic-app --project=group1-6m11
 git config --global user.email "faisal.6m11@gmail.com"
 git config --global user.name "Faisal 6m11"
 git add *
-git commit -m "Init"
 git push -u origin master
 ```
 
 ## CloudSQL
+
+CloudSQL using MySQL 8 is created using the google console and an game_user is created for connecting to the DB. 
 
 Connect to the CloudSQL instance and execute the following commands to create a `game_user` within the database. 
 
@@ -294,6 +373,20 @@ MySQL [xonoticdb]> desc leaderboard;
 5 rows in set (0.003 sec)
 ```
 
-set***Note:** To disalbe automatic VISUAL mode in VIM within GCP, enter `:set mouse-=a` within VIM.*
+Connect to the `xonotic-sandbox` VM which is created with all the dependencies preset to connect to the CloudSQL database with the help of MySQL client and has all the necessary Python runtime components to be able to run the `xonotic-sim.py` game simulor.
+
+The `xonotic-sim.py` was developed from scratch using Python 3.7, works up to 3.9. This is smart tool that is used to generat backend database, tables and populate test data. This is also used to create simulated game sessions and simulated live game matches which and eventually generate leaderboard data.
+
+**`python3 xonotic-sim.py 1000 register`** to register 1000 random users, all the user details are generated using random strings
+
+**`python3 xonotic-sim.py 128 start`**  to start a game lobby with estimated 128 intented users out of the 1000 registered earlier.
+
+**`python3 xonotic-sim.py 64 start`**  to start a game lobby with estimated 64 intented users out of the 1000 registered earlier.
+
+The `start` argument will create a game lobby, register users to the lobby and start a simulated match with random kills over a duration of time up to a certain pre defined randomized total kill number.
+
+Once this is done, we can switch to the web UI to see the data live on the xonotic-ui SG and US clusters.
+
+***Note:** To disalbe automatic VISUAL mode in VIM within GCP, enter `:set mouse-=a` within VIM.*
 
 ### Thank you 6m11
