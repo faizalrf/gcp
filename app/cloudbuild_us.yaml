@@ -1,0 +1,12 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/group1-6m11/x-leaderboard:$BRANCH_NAME-$COMMIT_SHA', '.']
+  timeout: 500s
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/group1-6m11/x-leaderboard:$BRANCH_NAME-$COMMIT_SHA']
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: ['set', 'image', 'deployment/xonotic-ui', 'x-leaderboard=gcr.io/group1-6m11/x-leaderboard:$BRANCH_NAME-$COMMIT_SHA']
+  env:
+  - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=xonotic-game-us'
+images: ['gcr.io/group1-6m11/x-leaderboard:$BRANCH_NAME-$COMMIT_SHA']
