@@ -41,8 +41,8 @@
       - `kubectl get svc,pods`
       - `kubectl get ingress`
     - connect to US cluster
-        - `kubectl get svc,pods`
-        - `kubectl get ingress`
+      - `kubectl get svc,pods`
+      - `kubectl get ingress`
   - Invites Faisal to talk about the backend database and UI
 - Faisal
   - Share screen
@@ -65,7 +65,7 @@
     - Update one of the HTML file
     - Execute the `git commit -am "Test commit"` and `git push`
     - Switch to the Cloud build UI -> history and show the two builds being processed
-    - In the cloud shell also show “watch kubectl get svc,pods” to show the app nodes being refreshed real-time
+    - In the cloud shell also show `watch kubectl get svc,pods` to show the app nodes being refreshed real-time
     - Once the update is done, login to the UI again and show the changes effective in both US and SG clusters
 
 ### Thank you :)
