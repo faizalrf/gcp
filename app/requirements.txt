@@ -7,4 +7,3 @@ gunicorn
 mysql-connector-python
 google.cloud.secret.manager
 pandas
-flask-wtf
