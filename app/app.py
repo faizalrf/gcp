@@ -56,9 +56,12 @@ def listGames():
     dfGames = pd.DataFrame(cursor.fetchall())
     #Assign the column header to the Dataframe
     dfGames.columns = [[ 'Game ID', 'Game Name', 'Total Players', 'Start Time', 'End Time' ]]
-
+    if len(dfGames) == 0:
+        return render_template('error.html', hostName=platform.uname()[1], ErrDesc='No Data Found!')
+    
     #flash('Game list generated on `host` -> {' + hostName + "}")
     return render_template('games_list.html',  tables=[dfGames.to_html(classes='data')], titles=dfGames.columns.values, hostName=platform.uname()[1])
+        
 
 @app.route('/players', endpoint='listPlayers')
 def listPlayers():
@@ -71,11 +74,11 @@ def listPlayers():
     #Assign the column header to the Dataframe
     dfPlayers.columns = [[ 'Player ID', 'Player Name', 'Player Email', 'Player Inventory', 'Player Level', 'Registration Date' ]]
 
-    #flash('Players list generated on `host` -> {' + hostName + "}")
-    if len(dfPlayers) > 0:
-        return render_template('games_players.html',  tables=[dfPlayers.to_html(classes='data')], titles=dfPlayers.columns.values, hostName=platform.uname()[1])
-    else:
+    if len(dfPlayers) == 0:
         return render_template('error.html', hostName=platform.uname()[1], ErrDesc="Please register some players!")
+
+    #flash('Players list generated on `host` -> {' + hostName + "}")
+    return render_template('games_players.html',  tables=[dfPlayers.to_html(classes='data')], titles=dfPlayers.columns.values, hostName=platform.uname()[1])
 
 @app.route('/gameplayers', endpoint='listGamePlayers')
 def listGamePlayers():
@@ -90,11 +93,11 @@ def listGamePlayers():
 
     # Formatting duplicates
     dfGamePlayers.loc[dfGamePlayers['Game ID'].duplicated(), ['Game ID','Game Name','Start Time']] = '-'
-    #flash('Players list generated on `host` -> {' + hostName + "}")
-    if len(dfGamePlayers) > 0:
-        return render_template('games_players.html',  tables=[dfGamePlayers.to_html(classes='data')], titles=dfGamePlayers.columns.values, hostName=platform.uname()[1])
-    else:
+    if len(dfGamePlayers) == 0:
         return render_template('error.html', hostName=platform.uname()[1], ErrDesc="Please register some players!")
+
+    #flash('Players list generated on `host` -> {' + hostName + "}")
+    return render_template('games_players.html',  tables=[dfGamePlayers.to_html(classes='data')], titles=dfGamePlayers.columns.values, hostName=platform.uname()[1])
 
 @app.route("/topThree", endpoint='listTopThree')
 def listTopThree():
@@ -109,6 +112,9 @@ def listTopThree():
 
     # Formatting duplicates
     dfTopPlayer.loc[dfTopPlayer['Game ID'].duplicated(), ['Game ID','Game Name','Start Time']] = '-'
+    if len(dfTopPlayer) == 0:
+        return render_template('error.html', hostName=platform.uname()[1], ErrDesc="Please register some players!")
+
     #flash('Leaderboard, TOP 3 for each server, generated on `host` -> {' + hostName + "}")
     return render_template('games_leaderboard.html',  tables=[dfTopPlayer.to_html(classes='data')], titles=dfTopPlayer.columns.values, hostName = platform.uname()[1])
 
@@ -125,6 +131,10 @@ def listTopFive():
 
     # Formatting duplicates
     dfTopPlayer.loc[dfTopPlayer['Game ID'].duplicated(), ['Game ID','Game Name','Start Time']] = '-'
+
+    if len(dfTopPlayer) == 0:
+        return render_template('error.html', hostName=platform.uname()[1], ErrDesc="Please register some players!")
+
     #flash('Leaderboard, TOP 3 for each server, generated on `host` -> {' + hostName + "}")
     return render_template('games_leaderboard.html',  tables=[dfTopPlayer.to_html(classes='data')], titles=dfTopPlayer.columns.values, hostName = platform.uname()[1])
 
