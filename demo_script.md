@@ -4,14 +4,20 @@
   - Intro
   - Shows the git up repo and how it's organized
   - High level intro on the infrastructure that we have
+  - Talk a bit about the IAM
+  - Show some of the default service accounts and the roles assigned to each
+  - Show the “SSH SECURE Tunnel” role which is required to login to VMs without external IP and secure boot
+  - Other details (TBD)
+  - Invite Shahril to show how the game works and how are the logs captured 
 - Shahril
   - Share screen
-  - Just show we have 2 clusters (US and APAC) Combined having UI and Xonotic Game Servers using Node pools, Veronica will provide more detail later on
   - Show the Gameplay process (Start client, use the APAC IP and port), play for a minute, make some kills\
   - Login to the console
+  - Show the cloud storage buckets
   - Go to the Logging -> Router and show Sink, talk a bit about how the Sink are created (1 to push the Xonotic game logs data real-time, directly to the Cloud storage, and another one to push to Big Query)
   - (I can jump in and say, We have both created so that later on if they want to do analytics on the data, they can use do ETL and push to BQ)
   - Login to the BQ and show the data being sink into it to the correct result set and execute some SQL to show how we can extract various statistics
+  - Invite Claudia to show the backend CloudSQL
 - Claudia
   - Share screen
   - Show the Backed CloudSQL instance that has been created, and how it was created.
@@ -23,11 +29,8 @@
   - Show databases
   - Show tables
   - No need to show the table structure, say Faisal will explain these tables in more detail later on
-- Andy
-  - Talk a bit about the IAM
-  - Show some of the grants
-  - Show the “SSH SECURE Tunnel” role which is required to login to VMs without external IP and secure boot
-  - Other details (TBD)
+  - Move to cloud storage and show the bucket created for database export backup
+  - Invie Veronica to discuss about how the provisioning is done
 - Veronica
   - Show the GitHub repo and the main README file which will have all the instruction on the deployment sequence and the database setup
   - Go through the deployment scripts how the two clusters are being created
@@ -40,6 +43,7 @@
     - connect to US cluster
         - `kubectl get svc,pods`
         - `kubectl get ingress`
+  - Invites Faisal to talk about the backend database and UI
 - Faisal
   - Share screen
   - Talk about the backend tables and their structure
@@ -47,6 +51,7 @@
   - Execute it and show the data being generated in the backend
   - Show the Web UI and the data from both SG and US cluster
     - Show the latency and how it effects from US front-end to SG backed Database
+  - Invites KuoShiong to talk about how CI/CD automation is done 
 - KuoShiong
   - Share screen
   - Talk about CI/CD and why it’s an important part of this setup, customer requirements
