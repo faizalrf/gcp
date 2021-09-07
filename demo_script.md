@@ -11,7 +11,7 @@
   - Invite Shahril to show how the game works and how are the logs captured 
 - Shahril
   - Share screen
-  - Show the Gameplay process (Start client, use the APAC IP and port), play for a minute, make some kills\
+  - Show the Gameplay process (Start client, use the APAC IP and port), play for a minute, make some kills and die a few times ;)
   - Login to the console
   - Show the cloud storage buckets
   - Go to the Logging -> Router and show Sink, talk a bit about how the Sink are created (1 to push the Xonotic game logs data real-time, directly to the Cloud storage, and another one to push to Big Query)
