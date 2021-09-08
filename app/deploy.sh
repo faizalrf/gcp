@@ -18,3 +18,5 @@ docker push gcr.io/$DEVSHELL_PROJECT_ID/x-leaderboard:v${Version}
 kubectl apply -f deploy.yaml
 kubectl apply -f deploy-lb.yaml
 kubectl apply -f deploy-ingress.yaml
+
+kubectl autoscale deployment xonotic-ui --max 6 --min 1 --cpu-percent 60
