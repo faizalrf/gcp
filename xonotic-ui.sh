@@ -1,8 +1,8 @@
-gcloud container --project group1-6m11 node-pools create xonotic-ui-pool \
+gcloud container --project $PROJECT_ID node-pools create xonotic-ui-pool \
 --cluster xonotic-game \
 --region asia-southeast1 \
 --tags=game-ui \
---machine-type e2-medium \
+--machine-type n1-standard-1 \
 --image-type "COS_CONTAINERD" \
 --disk-type "pd-standard" --disk-size 100 \
 --service-account "$SERVICE_ACCOUNT_ID@$PROJECT_ID.iam.gserviceaccount.com" \
