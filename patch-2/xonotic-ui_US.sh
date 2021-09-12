@@ -5,7 +5,7 @@ gcloud container --project group1-6m11 node-pools create xonotic-ui-pool \
 --machine-type e2-medium \
 --image-type "COS_CONTAINERD" \
 --disk-type "pd-standard" --disk-size 100 \
---service-account "group1@group1-6m11.iam.gserviceaccount.com" \
+--service-account "$SERVICE_ACCOUNT_ID@$PROJECT_ID.iam.gserviceaccount.com" \
 --num-nodes 1 \
 --enable-autoscaling --min-nodes 1 --max-nodes 3 \
 --no-enable-autoupgrade \
