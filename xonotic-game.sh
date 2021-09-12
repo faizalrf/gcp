@@ -21,4 +21,5 @@ gcloud beta container --project $PROJECT_ID clusters create xonotic-game \
 --max-surge-upgrade 1 \
 --max-unavailable-upgrade 0 \
 --enable-shielded-nodes --shielded-secure-boot --shielded-integrity-monitoring \
---node-locations "asia-southeast1-a","asia-southeast1-b"
+--node-locations "asia-southeast1-a"
+#,"asia-southeast1-b"

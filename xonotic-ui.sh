@@ -15,5 +15,6 @@ gcloud container --project $PROJECT_ID node-pools create xonotic-ui-pool \
 --max-surge-upgrade 1 \
 --max-unavailable-upgrade 0 \
 --shielded-secure-boot --shielded-integrity-monitoring \
---node-locations "asia-southeast1-a","asia-southeast1-b" \
---node-labels=pool=xonotic-ui-pool
+--node-labels=pool=xonotic-ui-pool \
+--node-locations "asia-southeast1-a"
+#,"asia-southeast1-b"
