@@ -1,4 +1,4 @@
-./xonotic-game-env.sh
+./config-xonotic-env.sh
 
 gcloud container --project $PROJECT_ID node-pools create xonotic-ui-pool \
 --cluster xonotic-game \
