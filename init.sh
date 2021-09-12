@@ -1,5 +1,14 @@
-./xonotic-network.sh
-./patch-2/xonotic-network_US.sh
+gcloud compute networks create demo-vpc --subnet-mode custom
+
+gcloud compute networks subnets create subnet-sg \
+--network demo-vpc \
+--range "192.168.100.0/24" \
+--region asia-southeast1
+
+gcloud compute networks subnets create subnet-us \
+--network demo-vpc \
+--range "192.168.200.0/24" \
+--region us-central1
 
 . ./config-xonotic-env.sh
 
