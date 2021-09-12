@@ -3,4 +3,4 @@
 ./xonotic-gameservers_US.sh
 ./xonotic-ui_US.sh
 # ~/gcp/patch-sample-ui-yaml/deploy-ui.sh
-./app/deploy.sh
+~/gcp/app/deploy.sh
