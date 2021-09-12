@@ -1,4 +1,4 @@
-./config-xonotic-env.sh
+. ./config-xonotic-env.sh
 
 gcloud container --project $PROJECT_ID node-pools create xonotic-ui-pool \
 --cluster xonotic-game \
@@ -15,5 +15,5 @@ gcloud container --project $PROJECT_ID node-pools create xonotic-ui-pool \
 --max-surge-upgrade 1 \
 --max-unavailable-upgrade 0 \
 --shielded-secure-boot --shielded-integrity-monitoring \
---node-locations "asia-southeast1-a","asia-southeast1-b","asia-southeast1-c" \
+--node-locations "asia-southeast1-a","asia-southeast1-b" \
 --node-labels=pool=xonotic-ui-pool

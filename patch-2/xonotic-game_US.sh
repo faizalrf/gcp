@@ -1,11 +1,11 @@
-../config-xonotic-env.sh
+. ../config-xonotic-env.sh
 
 gcloud beta container --project $PROJECT_ID clusters create xonotic-game-us \
 --region us-central1 \
 --cluster-version 1.19 \
 --tags=game-server \
 --scopes=gke-default \
---machine-type n1-standard-1 \
+--machine-type e2-standard-2 \
 --image-type "COS_CONTAINERD" \
 --disk-type "pd-standard" --disk-size 100 \
 --service-account "$SERVICE_ACCOUNT_ID@$PROJECT_ID.iam.gserviceaccount.com" \
@@ -21,4 +21,4 @@ gcloud beta container --project $PROJECT_ID clusters create xonotic-game-us \
 --max-surge-upgrade 1 \
 --max-unavailable-upgrade 0 \
 --enable-shielded-nodes --shielded-secure-boot --shielded-integrity-monitoring \
---node-locations "us-central1-a","us-central1-b","us-central1-c"
+--node-locations "us-central1-a","us-central1-b"
