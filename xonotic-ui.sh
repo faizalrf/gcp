@@ -1,3 +1,5 @@
+./xonotic-game-env.sh
+
 gcloud container --project $PROJECT_ID node-pools create xonotic-ui-pool \
 --cluster xonotic-game \
 --region asia-southeast1 \

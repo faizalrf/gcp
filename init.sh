@@ -1,8 +1,7 @@
 ./xonotic-network.sh
 ./patch-2/xonotic-network_US.sh
 
-export PROJECT_ID=mountkirk-test             # enter GCP Project ID
-export SERVICE_ACCOUNT_ID=xonotic-sa         # enter GCP custom service account to use
+./xonotic-game-env.sh
 
 gcloud iam service-accounts create $SERVICE_ACCOUNT_ID
 

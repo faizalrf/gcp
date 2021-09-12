@@ -1,3 +1,5 @@
+./xonotic-game-env.sh
+
 gcloud beta container --project $PROJECT_ID clusters create xonotic-game \
 --region asia-southeast1 \
 --cluster-version 1.19 \
