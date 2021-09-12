@@ -1,7 +1,7 @@
 ./xonotic-network.sh
 ./patch-2/xonotic-network_US.sh
 
-./xonotic-game-env.sh
+. ./config-xonotic-env.sh
 
 gcloud iam service-accounts create $SERVICE_ACCOUNT_ID
 
