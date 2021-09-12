@@ -1,3 +1,4 @@
+./xonotic-network_US.sh
 ./xonotic-game_US.sh
 ./config-xonotic-game_US.sh
 ./xonotic-gameservers_US.sh
