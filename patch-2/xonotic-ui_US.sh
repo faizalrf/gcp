@@ -17,4 +17,4 @@ gcloud container --project $PROJECT_ID node-pools create xonotic-ui-pool \
 --shielded-secure-boot --shielded-integrity-monitoring \
 --node-labels=pool=xonotic-ui-pool \
 --node-locations "us-central1-a"
-#,"us-central1-b"
+#,"us-central1-b","us-central1-c"

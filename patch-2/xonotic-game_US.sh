@@ -22,4 +22,4 @@ gcloud beta container --project $PROJECT_ID clusters create xonotic-game-us \
 --max-unavailable-upgrade 0 \
 --enable-shielded-nodes --shielded-secure-boot --shielded-integrity-monitoring \
 --node-locations "us-central1-a"
-#,"us-central1-b"
+#,"us-central1-b","us-central1-c"
