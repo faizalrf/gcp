@@ -141,7 +141,7 @@ Execute the `install.sh` from the root folder, the script calls the following
 
 - `deploy.sh`
 
-  This script builds the local UI app container for SG clusters and pushes it to Google Container Registry `gcr.io` finally applys the YAML files to actually deploy this container on to the GKE cluster UI node pool, sets uo load balancer with the help of ingress.
+  This script builds the local UI app container for SG clusters and pushes it to Google Container Registry `gcr.io` finally applys the YAML files to actually deploy this container on to the GKE cluster UI node pool, sets up load balancer with the help of ingress.
 
   ```
   docker build -t x-leaderboard:v${Version} .
@@ -153,6 +153,8 @@ Execute the `install.sh` from the root folder, the script calls the following
   kubectl apply -f deploy.yaml
   kubectl apply -f deploy-lb.yaml
   kubectl apply -f deploy-ingress.yaml
+  
+  kubectl autoscale deployment xonotic-ui --max 6 --min 1 --cpu-percent 60
   ```
 
   - `deploy.yaml`
@@ -185,7 +187,7 @@ Execute the `install.sh` from the root folder, the script calls the following
 
   - deploy-lb.yaml
     
-    To deplloy the Load balancer that listens on port `80`, internally connecting to the app on `8080`
+    To deploy the Load balancer that listens on port `80`, internally connecting to the app on `8080`
 
     ```
     apiVersion: v1
